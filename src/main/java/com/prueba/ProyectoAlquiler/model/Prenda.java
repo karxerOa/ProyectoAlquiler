@@ -1,16 +1,43 @@
 package com.prueba.ProyectoAlquiler.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 
+@Entity
+@Table(name = "prenda")
 public class Prenda {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_prenda")
     private int id_prenda;
+
+    @Column(name = "codigo_prenda", length = 80, nullable = false)
     private String codigo_prenda;
+
+    @Column(name = "nombre", length = 80, nullable = false)
     private String nombre;
+
+    @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
+
+    @Column(name = "talla", length = 80)
     private String talla;
+
+    @Column(name = "color", length = 80)
     private String color;
+
+    @Column(name = "precio_alquiler", precision = 10, scale = 2)
     private BigDecimal precio_alquiler;
+
+    @Column(name = "estado", length = 80)
     private String estado;
+
+    @Column(name = "id_categoria")
     private int id_categoria;
 
     public Prenda() {

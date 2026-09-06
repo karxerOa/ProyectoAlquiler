@@ -1,17 +1,44 @@
 package com.prueba.ProyectoAlquiler.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "mantenimiento")
 public class Mantenimiento {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_mantenimiento")
     private int id_mantenimiento;
+
+    @Column(name = "fecha_inicio", nullable = false)
     private LocalDate fecha_inicio;
+
+    @Column(name = "fecha_fin")
     private LocalDate fecha_fin;
+
+    @Column(name = "tipo_mantenimiento", length = 80)
     private String tipo_mantenimiento;
+
+    @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
+
+    @Column(name = "costo", precision = 10, scale = 2)
     private BigDecimal costo;
+
+    @Column(name = "estado", length = 20)
     private String estado;
+
+    @Column(name = "id_prenda")
     private int id_prenda;
+
+    @Column(name = "id_trabajador")
     private int id_trabajador;
 
     public Mantenimiento() {
