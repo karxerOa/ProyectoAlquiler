@@ -3,7 +3,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
@@ -13,9 +16,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Alquiler {
 
-    private int idAlquiler;
+    @Id
+    private Integer idAlquiler;
     private LocalDate fechaAlquiler;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
