@@ -27,6 +27,6 @@ public class Devolucion {
 
     //relaciones
     @ManyToOne
-    @JoinColumn(name="idempledado", nullable = false,foreignKey = @ForeignKey(name="FK_empleado_devolucion"))
+    @JoinColumn(name="idEmpledado", nullable = false,foreignKey = @ForeignKey(name="FK_empleado_devolucion"))
     private  Empleado empleado;
 }
