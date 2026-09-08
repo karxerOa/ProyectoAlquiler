@@ -48,4 +48,3 @@ public class Mantenimiento {
     @JoinColumn(name = "id_trabajador", nullable = false, foreignKey = @ForeignKey(name = "FK_trabajador_mantenimiento"))
     private Empleado empleado;
 }
-
