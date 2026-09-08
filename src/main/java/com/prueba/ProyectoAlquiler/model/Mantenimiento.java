@@ -17,6 +17,7 @@ import java.time.LocalDate;
 public class Mantenimiento {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     @Column(name = "id_mantenimiento", nullable = false)
     private Integer idMantenimiento;
