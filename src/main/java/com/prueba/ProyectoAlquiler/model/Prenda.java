@@ -14,8 +14,6 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Prenda {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include

@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @Entity
 public class Mantenimiento {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -50,4 +49,3 @@ public class Mantenimiento {
     private Empleado empleado;
 }
 
-}
