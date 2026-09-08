@@ -1,12 +1,12 @@
 package com.prueba.ProyectoAlquiler.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,4 +27,8 @@ public class Categoria {
 
     @Column(nullable = false, length = 20)
     private String estado;
+
+
+    @OneToMany
+    private List<Prenda> prendas;
 }

@@ -39,11 +39,12 @@ public class Mantenimiento {
     @Column(name = "estado", nullable = false, length = 20)
     private String estado;
 
+    //relaciones
     @ManyToOne
-    @JoinColumn(name = "id_prenda", nullable = false, foreignKey = @ForeignKey(name = "FK_prenda_mantenimiento"))
+    @JoinColumn(name = "idPrenda", nullable = false, foreignKey = @ForeignKey(name = "FK_prenda_mantenimiento"))
     private Prenda prenda;
 
     @ManyToOne
-    @JoinColumn(name = "id_trabajador", nullable = false, foreignKey = @ForeignKey(name = "FK_trabajador_mantenimiento"))
+    @JoinColumn(name = "idEmpeado", nullable = false, foreignKey = @ForeignKey(name = "FK_trabajador_mantenimiento"))
     private Empleado empleado;
 }

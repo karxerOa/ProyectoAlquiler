@@ -1,10 +1,6 @@
 package com.prueba.ProyectoAlquiler.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,11 +32,14 @@ public class Produccion {
     @Column(columnDefinition = "TEXT")
     private String descripcion;
 
+    // relaciones
     @ManyToOne
-    @JoinColumn(name = "id_prenda", nullable = false)
+    @JoinColumn(name = "id_prenda", nullable = false,
+            foreignKey = @ForeignKey(name = "FK_prenda_produccion"))
     private Prenda prenda;
 
     @ManyToOne
-    @JoinColumn(name = "id_empleado", nullable = false)
+    @JoinColumn(name = "id_empleado", nullable = false,
+            foreignKey = @ForeignKey(name = "FK_trabajador_produccion"))
     private Empleado empleado;
 }

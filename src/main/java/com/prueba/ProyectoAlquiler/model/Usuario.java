@@ -13,22 +13,24 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name="user_data")
 public class Usuario {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer idUser;
 
-    @Column(nullable = false, unique = true,  length = 20)
-    private String  username;
+    @Column(nullable = false, unique = true, length = 20)
+    private String username;
 
-    @Column(nullable = false, unique = true,  length = 100)
+    @Column(nullable = false, length = 100)
     private String password; // bcrypt
 
     @Column(nullable = false)
     private boolean enabled;
 
+    // relaciones
     @ManyToOne
-    @JoinColumn(name="idRol", nullable = false,foreignKey = @ForeignKey(name="FK_rol_usuario"))
+    @JoinColumn(name = "id_rol", nullable = false,
+            foreignKey = @ForeignKey(name = "FK_rol_usuario"))
     private Rol rol;
 }

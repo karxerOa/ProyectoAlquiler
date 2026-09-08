@@ -27,8 +27,9 @@ public class Penalidad {
     private Date fecha_penalidad;
     private Boolean estado;
 
-    //relaciones
+    // relaciones
     @ManyToOne
-    @JoinColumn(name="iddevolucion", nullable = false,foreignKey = @ForeignKey(name="FK_devolucion_penalidad"))
-    private  Devolucion devolucion;
+    @JoinColumn(name = "id_devolucion", nullable = false,
+            foreignKey = @ForeignKey(name = "FK_devolucion_penalidad"))
+    private Devolucion devolucion;
 }

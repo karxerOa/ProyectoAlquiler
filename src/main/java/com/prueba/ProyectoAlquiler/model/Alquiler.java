@@ -3,8 +3,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -19,29 +18,34 @@ import java.util.List;
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Alquiler {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Integer idAlquiler;
+
     private LocalDate fechaAlquiler;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private String estado;
     private BigDecimal subtotal;
     private BigDecimal total;
-    private int idCliente;
-    private int idTrabajador;
 
     // relaciones
+    @ManyToOne
+    @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
-    private Empleado trabajador;
-    private List<DetalleAlquiler> detalles;
-    private Pago pago;
-    private Devolucion devolucion;
 
-    public BigDecimal calcularTotal() {
-        if (detalles == null || detalles.isEmpty()) return BigDecimal.ZERO;
-        return detalles.stream()
-                .map(DetalleAlquiler::getSubtotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
+    @ManyToOne
+    @JoinColumn(name = "id_trabajador", nullable = false)
+    private Empleado trabajador;
+
+    @OneToMany
+    private List<DetalleAlquiler> detalles;
+
+    @OneToMany
+    private List<Pago> pagos;
+
+    @OneToMany
+    private List<Devolucion> devoluciones;
+
 }

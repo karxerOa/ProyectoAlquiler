@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -40,7 +41,19 @@ public class Prenda {
 
     @Column(name = "estado", nullable = false, length = 20)
     private String estado;
+
+    // relaciones
     @ManyToOne
-    @JoinColumn(name = "id_categoria", nullable = false, foreignKey = @ForeignKey(name = "FK_categoria_prenda"))
+    @JoinColumn(name = "id_categoria", nullable = false,
+            foreignKey = @ForeignKey(name = "FK_categoria_prenda"))
     private Categoria categoria;
+
+    @OneToMany
+    private List<Produccion> producciones;
+
+    @OneToMany
+    private List<Mantenimiento> mantenimientos;
+
+    @OneToMany
+    private List<DetalleAlquiler> detalles;
 }

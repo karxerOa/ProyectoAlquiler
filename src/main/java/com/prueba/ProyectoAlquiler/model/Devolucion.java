@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -25,8 +26,17 @@ public class Devolucion {
     @Column(nullable = false)
     private String observacion;
 
-    //relaciones
+    // relaciones
     @ManyToOne
-    @JoinColumn(name="idEmpledado", nullable = false,foreignKey = @ForeignKey(name="FK_empleado_devolucion"))
-    private  Empleado empleado;
+    @JoinColumn(name = "id_alquiler", nullable = false,
+            foreignKey = @ForeignKey(name = "FK_alquiler_devolucion"))
+    private Alquiler alquiler;
+
+    @ManyToOne
+    @JoinColumn(name = "id_empleado", nullable = false,
+            foreignKey = @ForeignKey(name = "FK_trabajador_devolucion"))
+    private Empleado empleado;
+
+    @OneToMany
+    private List<Penalidad> penalidades;
 }
