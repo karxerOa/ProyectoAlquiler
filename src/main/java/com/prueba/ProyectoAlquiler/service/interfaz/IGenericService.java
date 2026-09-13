@@ -1,4 +1,4 @@
-package com.prueba.ProyectoAlquiler.service.interfaces;
+package com.prueba.ProyectoAlquiler.service.interfaz;
 
 
 import java.util.List;

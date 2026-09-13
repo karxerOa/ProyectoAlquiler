@@ -1,7 +1,7 @@
 package com.prueba.ProyectoAlquiler.service.implementation;
 
 import com.prueba.ProyectoAlquiler.repository.IGenericRepository;
-import com.prueba.ProyectoAlquiler.service.interfaces.IGenericService;
+import com.prueba.ProyectoAlquiler.service.interfaz.IGenericService;
 
 import java.util.List;
 
