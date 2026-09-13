@@ -20,16 +20,16 @@ public class Cliente {
     @Id
     @EqualsAndHashCode.Include
     private Integer idCliente;
-    @Column(nullable = false, unique = true,  length = 50)
+    @Column(nullable = false,  length = 50)
     private String nombre;
-    @Column(nullable = false, unique = true,  length = 50)
+    @Column(nullable = false,  length = 50)
     private String apellidos;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private int dni;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private int telefono;
 
-    @Column(nullable = false, unique = true,  length = 100)
+    @Column(nullable = false,  length = 100)
     private String direccion;
     @Column(nullable = false, unique = true,  length = 100)
     private String correo;
