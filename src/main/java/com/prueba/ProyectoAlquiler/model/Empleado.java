@@ -20,18 +20,18 @@ public class Empleado {
     @Id
     @EqualsAndHashCode.Include
     private Integer idEmpleado;
-    @Column(nullable = false, unique = true,  length = 100)
+    @Column(nullable = false,  length = 100)
     private String nombres;
-    @Column(nullable = false, unique = true,  length = 100)
+    @Column(nullable = false,  length = 100)
     private String apellidos;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private int dni;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private int telefono;
 
-    @Column(nullable = false, unique = true,  length = 80)
+    @Column(nullable = false,  length = 80)
     private String cargo;
-    @Column(nullable = false, unique = true,  length = 20)
+    @Column(nullable = false,  length = 20)
     private String estado;
 
     //relacion
