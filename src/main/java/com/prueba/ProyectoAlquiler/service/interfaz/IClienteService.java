@@ -5,7 +5,7 @@ import com.prueba.ProyectoAlquiler.model.Cliente;
 
 //import java.util.List;
 
-public interface IClienteService extends IGenericService<Cliente, Integer>    {
+public interface IClienteService extends IGenericService<Cliente, Integer> {
     /*Cliente save(Cliente cliente) throws Exception;
     Cliente update(Integer id, Cliente cliente) throws Exception;
     List<Cliente> findAll() throws Exception;
