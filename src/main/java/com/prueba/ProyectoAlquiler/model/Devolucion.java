@@ -17,12 +17,13 @@ import java.util.List;
 @Entity
 public class Devolucion {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer idDevolucion;
     @Column(nullable = false, unique = true,  length = 50)
     private Date fechaDevolucion;
     @Column(nullable = false, unique = true,  length = 50)
-    private String estadoprenda;
+    private String estadoPrenda;
     @Column(nullable = false)
     private String observacion;
 

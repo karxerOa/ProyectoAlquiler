@@ -16,6 +16,7 @@ import java.util.Date;
 @Entity
 public class Penalidad {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer idPenalidad;
     @Column(nullable = false, unique = true,  length = 50)

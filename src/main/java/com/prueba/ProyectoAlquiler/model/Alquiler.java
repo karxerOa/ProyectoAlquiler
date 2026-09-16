@@ -3,11 +3,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,22 +28,26 @@ public class Alquiler {
     private BigDecimal subtotal;
     private BigDecimal total;
 
-    // relaciones
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "alquiler")
+    private List<DetalleAlquiler> detalles;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "alquiler")
+    private List<Pago> pagos;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "alquiler")
+    private List<Devolucion> devoluciones;
+
+    @ManyToOne
+    @JoinColumn(name = "id_empleado", nullable = false)
+    private Empleado empleado;
+
     @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
-
-    @ManyToOne
-    @JoinColumn(name = "id_trabajador", nullable = false)
-    private Empleado trabajador;
-
-    @OneToMany
-    private List<DetalleAlquiler> detalles;
-
-    @OneToMany
-    private List<Pago> pagos;
-
-    @OneToMany
-    private List<Devolucion> devoluciones;
-
 }
