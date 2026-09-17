@@ -1,10 +1,8 @@
 package com.prueba.ProyectoAlquiler.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +13,6 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Prenda {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -49,12 +46,18 @@ public class Prenda {
             foreignKey = @ForeignKey(name = "FK_categoria_prenda"))
     private Categoria categoria;
 
-    @OneToMany
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "prenda")
     private List<Produccion> producciones;
 
-    @OneToMany
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "prenda")
     private List<Mantenimiento> mantenimientos;
 
-    @OneToMany
-    private List<DetalleAlquiler> detalles;
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "prenda")
+    private List<DetalleAlquiler> detallesAlquiler;
 }

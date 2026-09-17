@@ -1,10 +1,8 @@
 package com.prueba.ProyectoAlquiler.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -25,7 +23,9 @@ public class Rol {
     @Column(nullable = false, length = 100)
     private String description;
 
-    @OneToMany
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "rol")
     private List<Usuario> usuarios;
 
 }

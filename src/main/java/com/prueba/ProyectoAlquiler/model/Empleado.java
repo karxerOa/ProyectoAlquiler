@@ -1,13 +1,8 @@
 package com.prueba.ProyectoAlquiler.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
 
@@ -17,33 +12,42 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Empleado {
-    @Id
     @EqualsAndHashCode.Include
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer idEmpleado;
     @Column(nullable = false,  length = 100)
     private String nombres;
     @Column(nullable = false,  length = 100)
     private String apellidos;
     @Column(nullable = false, unique = true)
-    private int dni;
+    private Integer dni;
     @Column(nullable = false, unique = true)
-    private int telefono;
+    private Integer telefono;
 
     @Column(nullable = false,  length = 80)
     private String cargo;
     @Column(nullable = false,  length = 20)
     private String estado;
 
-    //relacion
-    @OneToMany
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "empleado")
     private List<Produccion> producciones;
 
-    @OneToMany
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "empleado")
     private List<Mantenimiento> mantenimientos;
 
-    @OneToMany
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "empleado")
     private List<Alquiler> alquileres;
 
-    @OneToMany
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "empleado")
     private List<Devolucion> devoluciones;
 }

@@ -1,6 +1,6 @@
 package com.prueba.ProyectoAlquiler.controller;
 import com.prueba.ProyectoAlquiler.model.Cliente;
-import com.prueba.ProyectoAlquiler.model.Empleado;
+
 import com.prueba.ProyectoAlquiler.service.interfaz.IClienteService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class ClienteController {
     @PostMapping // 201 --> Created
     public ResponseEntity<Cliente> save(@RequestBody Cliente cliente) throws Exception{
         Cliente obj = service.save(cliente);
-        return new ResponseEntity(obj, HttpStatus.CREATED);
+        return new ResponseEntity<>(obj, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

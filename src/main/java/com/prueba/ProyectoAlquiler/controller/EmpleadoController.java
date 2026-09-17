@@ -32,7 +32,7 @@ public class EmpleadoController {
     @PostMapping // 201 --> Created
     public ResponseEntity<Empleado> save(@RequestBody Empleado empleado) throws Exception{
         Empleado obj = service.save(empleado);
-        return new ResponseEntity(obj, HttpStatus.CREATED); // larmonxtech
+        return new ResponseEntity<>(obj, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}") // 200 ok

@@ -1,10 +1,8 @@
 package com.prueba.ProyectoAlquiler.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -16,6 +14,7 @@ import java.util.List;
 public class Categoria {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer idCategoria;
 
@@ -28,7 +27,8 @@ public class Categoria {
     @Column(nullable = false, length = 20)
     private String estado;
 
-
-    @OneToMany
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "categoria")
     private List<Prenda> prendas;
 }
