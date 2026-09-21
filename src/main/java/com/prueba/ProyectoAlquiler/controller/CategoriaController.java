@@ -1,8 +1,11 @@
 package com.prueba.ProyectoAlquiler.controller;
 
+import com.prueba.ProyectoAlquiler.dto.CategoriaDto;
 import com.prueba.ProyectoAlquiler.model.Categoria;
 import com.prueba.ProyectoAlquiler.service.interfaz.ICategoriaService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,25 +24,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoriaController {
     private final ICategoriaService service;
+    @Qualifier("categoriaMapper")
+    private final ModelMapper modelMapper;
 
     @GetMapping
-    public ResponseEntity<List<Categoria>> findAll() throws Exception {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<List<CategoriaDto>> findAll() throws Exception {
+        return ResponseEntity.ok(service.findAll().stream()
+            .map(entity -> modelMapper.map(entity, CategoriaDto.class))
+            .toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> findById(@PathVariable Integer id) throws Exception {
-        return ResponseEntity.ok(service.findById(id));
+    public ResponseEntity<CategoriaDto> findById(@PathVariable Integer id) throws Exception {
+        return ResponseEntity.ok(modelMapper.map(service.findById(id), CategoriaDto.class));
     }
 
     @PostMapping
-    public ResponseEntity<Categoria> save(@RequestBody Categoria categoria) throws Exception {
-        return new ResponseEntity<>(service.save(categoria), HttpStatus.CREATED);
+    public ResponseEntity<CategoriaDto> save(@RequestBody CategoriaDto categoria) throws Exception {
+        Categoria entity = modelMapper.map(categoria, Categoria.class);
+        return new ResponseEntity<>(modelMapper.map(service.save(entity), CategoriaDto.class), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Categoria> update(@PathVariable Integer id, @RequestBody Categoria categoria) throws Exception {
-        return ResponseEntity.ok(service.update(id, categoria));
+    public ResponseEntity<CategoriaDto> update(@PathVariable Integer id, @RequestBody CategoriaDto categoria) throws Exception {
+        categoria.setIdCategoria(id);
+        Categoria entity = modelMapper.map(categoria, Categoria.class);
+        return ResponseEntity.ok(modelMapper.map(service.update(id, entity), CategoriaDto.class));
     }
 
     @DeleteMapping("/{id}")

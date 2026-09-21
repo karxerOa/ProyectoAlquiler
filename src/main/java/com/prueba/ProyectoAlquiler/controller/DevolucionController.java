@@ -1,8 +1,11 @@
 package com.prueba.ProyectoAlquiler.controller;
 
+import com.prueba.ProyectoAlquiler.dto.DevolucionDto;
 import com.prueba.ProyectoAlquiler.model.Devolucion;
 import com.prueba.ProyectoAlquiler.service.interfaz.IDevolucionService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,25 +24,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DevolucionController {
     private final IDevolucionService service;
+    @Qualifier("devolucionMapper")
+    private final ModelMapper modelMapper;
 
     @GetMapping
-    public ResponseEntity<List<Devolucion>> findAll() throws Exception {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<List<DevolucionDto>> findAll() throws Exception {
+        return ResponseEntity.ok(service.findAll().stream()
+            .map(entity -> modelMapper.map(entity, DevolucionDto.class))
+            .toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Devolucion> findById(@PathVariable Integer id) throws Exception {
-        return ResponseEntity.ok(service.findById(id));
+    public ResponseEntity<DevolucionDto> findById(@PathVariable Integer id) throws Exception {
+        return ResponseEntity.ok(modelMapper.map(service.findById(id), DevolucionDto.class));
     }
 
     @PostMapping
-    public ResponseEntity<Devolucion> save(@RequestBody Devolucion devolucion) throws Exception {
-        return new ResponseEntity<>(service.save(devolucion), HttpStatus.CREATED);
+    public ResponseEntity<DevolucionDto> save(@RequestBody DevolucionDto devolucion) throws Exception {
+        Devolucion entity = modelMapper.map(devolucion, Devolucion.class);
+        return new ResponseEntity<>(modelMapper.map(service.save(entity), DevolucionDto.class), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Devolucion> update(@PathVariable Integer id, @RequestBody Devolucion devolucion) throws Exception {
-        return ResponseEntity.ok(service.update(id, devolucion));
+    public ResponseEntity<DevolucionDto> update(@PathVariable Integer id, @RequestBody DevolucionDto devolucion) throws Exception {
+        devolucion.setIdDevolucion(id);
+        Devolucion entity = modelMapper.map(devolucion, Devolucion.class);
+        return ResponseEntity.ok(modelMapper.map(service.update(id, entity), DevolucionDto.class));
     }
 
     @DeleteMapping("/{id}")

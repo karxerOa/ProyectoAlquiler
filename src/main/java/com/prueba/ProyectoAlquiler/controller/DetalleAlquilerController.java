@@ -1,8 +1,11 @@
 package com.prueba.ProyectoAlquiler.controller;
+import com.prueba.ProyectoAlquiler.dto.DetalleAlquilerDto;
 import com.prueba.ProyectoAlquiler.model.DetalleAlquiler;
 import com.prueba.ProyectoAlquiler.service.interfaz.IDetalleAlquilerService;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,26 +17,31 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DetalleAlquilerController {
     private final IDetalleAlquilerService service;
+    @Qualifier("detalleAlquilerMapper")
+    private final ModelMapper modelMapper;
 
     @GetMapping
-    public ResponseEntity<List<DetalleAlquiler>> findAll() throws Exception {
-        List<DetalleAlquiler> list = service.findAll();
-        return ResponseEntity.ok(list);
+    public ResponseEntity<List<DetalleAlquilerDto>> findAll() throws Exception {
+        return ResponseEntity.ok(service.findAll().stream()
+            .map(entity -> modelMapper.map(entity, DetalleAlquilerDto.class))
+            .toList());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<DetalleAlquiler> findById(@PathVariable Integer id) throws Exception {
-        DetalleAlquiler obj = service.findById(id);
-        return ResponseEntity.ok(obj);
+    public ResponseEntity<DetalleAlquilerDto> findById(@PathVariable Integer id) throws Exception {
+        return ResponseEntity.ok(modelMapper.map(service.findById(id), DetalleAlquilerDto.class));
     }
     @PostMapping
-    public ResponseEntity<DetalleAlquiler> save(@RequestBody DetalleAlquiler detalleAlquiler) throws Exception {
-        DetalleAlquiler obj = service.save(detalleAlquiler);
-        return new ResponseEntity<>(obj, HttpStatus.CREATED);
+    public ResponseEntity<DetalleAlquilerDto> save(@RequestBody DetalleAlquilerDto detalleAlquiler) throws Exception {
+        DetalleAlquiler entity = modelMapper.map(detalleAlquiler, DetalleAlquiler.class);
+        DetalleAlquiler obj = service.save(entity);
+        return new ResponseEntity<>(modelMapper.map(obj, DetalleAlquilerDto.class), HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<DetalleAlquiler> update(@PathVariable Integer id, @RequestBody DetalleAlquiler detalleAlquiler) throws Exception {
-        DetalleAlquiler obj = service.update(id, detalleAlquiler);
-        return ResponseEntity.ok(obj);
+    public ResponseEntity<DetalleAlquilerDto> update(@PathVariable Integer id, @RequestBody DetalleAlquilerDto detalleAlquiler) throws Exception {
+        detalleAlquiler.setIdDetalle(id);
+        DetalleAlquiler entity = modelMapper.map(detalleAlquiler, DetalleAlquiler.class);
+        DetalleAlquiler obj = service.update(id, entity);
+        return ResponseEntity.ok(modelMapper.map(obj, DetalleAlquilerDto.class));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Integer id) throws Exception {

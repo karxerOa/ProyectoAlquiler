@@ -1,10 +1,13 @@
 package com.prueba.ProyectoAlquiler.controller;
 
+import com.prueba.ProyectoAlquiler.dto.ProduccionDto;
 import com.prueba.ProyectoAlquiler.model.Produccion;
 import com.prueba.ProyectoAlquiler.service.interfaz.IProduccionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,25 +24,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProduccionController {
     private final IProduccionService service;
+    @Qualifier("produccionMapper")
+    private final ModelMapper modelMapper;
 
     @GetMapping
-    public ResponseEntity<List<Produccion>> findAll() throws Exception {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<List<ProduccionDto>> findAll() throws Exception {
+        return ResponseEntity.ok(service.findAll().stream().map(entity -> modelMapper.map(entity, ProduccionDto.class)).toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produccion> findById(@PathVariable Integer id) throws Exception {
-        return ResponseEntity.ok(service.findById(id));
+    public ResponseEntity<ProduccionDto> findById(@PathVariable Integer id) throws Exception {
+        return ResponseEntity.ok(modelMapper.map(service.findById(id), ProduccionDto.class));
     }
 
     @PostMapping
-    public ResponseEntity<Produccion> save(@RequestBody Produccion produccion) throws Exception {
-        return new ResponseEntity<>(service.save(produccion), HttpStatus.CREATED);
+    public ResponseEntity<ProduccionDto> save(@RequestBody ProduccionDto produccion) throws Exception {
+        Produccion entity = modelMapper.map(produccion, Produccion.class);
+        return new ResponseEntity<>(modelMapper.map(service.save(entity), ProduccionDto.class), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Produccion> update(@PathVariable Integer id, @RequestBody Produccion produccion) throws Exception {
-        return ResponseEntity.ok(service.update(id, produccion));
+    public ResponseEntity<ProduccionDto> update(@PathVariable Integer id, @RequestBody ProduccionDto produccion) throws Exception {
+        produccion.setIdProduccion(id);
+        Produccion entity = modelMapper.map(produccion, Produccion.class);
+        return ResponseEntity.ok(modelMapper.map(service.update(id, entity), ProduccionDto.class));
     }
 
     @DeleteMapping("/{id}")
