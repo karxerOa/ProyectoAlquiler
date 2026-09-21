@@ -1,9 +1,11 @@
 package com.prueba.ProyectoAlquiler.controller;
+import com.prueba.ProyectoAlquiler.dto.ClienteDTO;
 import com.prueba.ProyectoAlquiler.model.Cliente;
 
 import com.prueba.ProyectoAlquiler.service.interfaz.IClienteService;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClienteController {
     private final IClienteService service;
+
+    private ModelMapper modelMapper;
+
     @GetMapping // 200 -> ok
-    public ResponseEntity<List<Cliente>> findAll() throws Exception{
-        List<Cliente> list = service.findAll();
+    public ResponseEntity<List<ClienteDTO>> findAll() throws Exception{
+        List<ClienteDTO>list = service.findAll().stream()
+                .map(e-> modelMapper.map(e,ClienteDTO.class))
+                .toList();
         return ResponseEntity.ok(list);
     }
 
