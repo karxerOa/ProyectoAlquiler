@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+
 
 @Data
 @NoArgsConstructor
@@ -31,6 +31,6 @@ public class Usuario {
     // relaciones
     @ManyToOne
     @JoinColumn(name = "id_rol", nullable = false,
-            foreignKey = @ForeignKey(name = "FK_rol_usuario"))
+    foreignKey = @ForeignKey(name = "FK_rol_usuario"))
     private Rol rol;
 }

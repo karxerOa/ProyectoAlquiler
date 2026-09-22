@@ -12,5 +12,7 @@ public class UsuarioDto {
     private String username;
     private String password;
     private boolean enabled;
+
     private Integer rolId;
+    private String name;
 }

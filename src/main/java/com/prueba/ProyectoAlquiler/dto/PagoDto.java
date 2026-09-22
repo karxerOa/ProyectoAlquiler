@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PagoDto {
-    private Integer idPago;
     private LocalDate fechaPago;
     private BigDecimal monto;
     private String metodoPago;

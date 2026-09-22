@@ -11,12 +11,13 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class PrendaDto {
     private Integer idPrenda;
-    private String codigoPrenda;
     private String nombre;
     private String descripcion;
     private String talla;
     private String color;
     private BigDecimal precioAlquiler;
     private String estado;
+
+    private String categoriaNombre;
     private Integer categoriaId;
 }

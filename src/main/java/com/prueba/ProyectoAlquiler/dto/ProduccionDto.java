@@ -16,6 +16,6 @@ public class ProduccionDto {
     private int cantidad;
     private BigDecimal costoProduccion;
     private String descripcion;
-    private Integer prendaId;
-    private Integer empleadoId;
+    private Integer idPrenda;
+    private Integer idEmpleado;
 }

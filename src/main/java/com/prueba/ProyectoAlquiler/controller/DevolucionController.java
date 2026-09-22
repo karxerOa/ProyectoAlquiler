@@ -3,7 +3,6 @@ package com.prueba.ProyectoAlquiler.controller;
 import com.prueba.ProyectoAlquiler.dto.DevolucionDto;
 import com.prueba.ProyectoAlquiler.model.Devolucion;
 import com.prueba.ProyectoAlquiler.service.interfaz.IDevolucionService;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -21,11 +20,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/devoluciones")
-@RequiredArgsConstructor
 public class DevolucionController {
     private final IDevolucionService service;
-    @Qualifier("devolucionMapper")
     private final ModelMapper modelMapper;
+
+    public DevolucionController(IDevolucionService service,
+        @Qualifier("devolucionMapper") ModelMapper modelMapper) {
+        this.service = service;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     public ResponseEntity<List<DevolucionDto>> findAll() throws Exception {

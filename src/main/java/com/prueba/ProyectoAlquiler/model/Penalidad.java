@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.apache.el.parser.BooleanNode;
+
 
 import java.util.Date;
 
@@ -31,6 +31,6 @@ public class Penalidad {
     // relaciones
     @ManyToOne
     @JoinColumn(name = "id_devolucion", nullable = false,
-            foreignKey = @ForeignKey(name = "FK_devolucion_penalidad"))
+    foreignKey = @ForeignKey(name = "FK_devolucion_penalidad"))
     private Devolucion devolucion;
 }

@@ -19,10 +19,7 @@ public class Prenda {
     @Column(name = "id_prenda", nullable = false)
     private Integer idPrenda;
 
-    @Column(name = "codigo_prenda", nullable = false, unique = true, length = 30)
-    private String codigoPrenda;
-
-    @Column(name = "nombre", nullable = false, length = 100)
+    @Column(name = "nombre_prenda", nullable = false, length = 100)
     private String nombre;
 
     @Column(name = "descripcion", columnDefinition = "TEXT")

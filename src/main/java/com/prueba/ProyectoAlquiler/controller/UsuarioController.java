@@ -3,7 +3,6 @@ package com.prueba.ProyectoAlquiler.controller;
 import com.prueba.ProyectoAlquiler.dto.UsuarioDto;
 import com.prueba.ProyectoAlquiler.model.Usuario;
 import com.prueba.ProyectoAlquiler.service.interfaz.IUsuarioService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.modelmapper.ModelMapper;
@@ -21,11 +20,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/usuarios")
-@RequiredArgsConstructor
 public class UsuarioController {
     private final IUsuarioService service;
-    @Qualifier("usuarioMapper")
     private final ModelMapper modelMapper;
+
+    public UsuarioController(IUsuarioService service,
+        @Qualifier("usuarioMapper") ModelMapper modelMapper) {
+        this.service = service;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     public ResponseEntity<List<UsuarioDto>> findAll() throws Exception {

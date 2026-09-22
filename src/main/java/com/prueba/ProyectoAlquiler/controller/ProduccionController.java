@@ -3,7 +3,6 @@ package com.prueba.ProyectoAlquiler.controller;
 import com.prueba.ProyectoAlquiler.dto.ProduccionDto;
 import com.prueba.ProyectoAlquiler.model.Produccion;
 import com.prueba.ProyectoAlquiler.service.interfaz.IProduccionService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.modelmapper.ModelMapper;
@@ -21,11 +20,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/producciones")
-@RequiredArgsConstructor
 public class ProduccionController {
     private final IProduccionService service;
-    @Qualifier("produccionMapper")
     private final ModelMapper modelMapper;
+
+    public ProduccionController(IProduccionService service,
+        @Qualifier("produccionMapper") ModelMapper modelMapper) {
+        this.service = service;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     public ResponseEntity<List<ProduccionDto>> findAll() throws Exception {

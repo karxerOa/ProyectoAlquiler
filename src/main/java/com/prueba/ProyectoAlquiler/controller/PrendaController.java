@@ -3,7 +3,6 @@ package com.prueba.ProyectoAlquiler.controller;
 import com.prueba.ProyectoAlquiler.dto.PrendaDto;
 import com.prueba.ProyectoAlquiler.model.Prenda;
 import com.prueba.ProyectoAlquiler.service.interfaz.IPrendaService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.modelmapper.ModelMapper;
@@ -21,11 +20,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/prendas")
-@RequiredArgsConstructor
 public class PrendaController {
     private final IPrendaService service;
-    @Qualifier("prendaMapper")
     private final ModelMapper modelMapper;
+
+    public PrendaController(IPrendaService service,
+        @Qualifier("prendaMapper") ModelMapper modelMapper) {
+        this.service = service;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     public ResponseEntity<List<PrendaDto>> findAll() throws Exception {

@@ -3,7 +3,6 @@ package com.prueba.ProyectoAlquiler.controller;
 import com.prueba.ProyectoAlquiler.dto.PenalidadDto;
 import com.prueba.ProyectoAlquiler.model.Penalidad;
 import com.prueba.ProyectoAlquiler.service.interfaz.IPenalidadService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.modelmapper.ModelMapper;
@@ -21,11 +20,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/penalidades")
-@RequiredArgsConstructor
 public class PenalidadController {
     private final IPenalidadService service;
-    @Qualifier("penalidadMapper")
     private final ModelMapper modelMapper;
+
+    public PenalidadController(IPenalidadService service,
+        @Qualifier("penalidadMapper") ModelMapper modelMapper) {
+        this.service = service;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     public ResponseEntity<List<PenalidadDto>> findAll() throws Exception {
@@ -45,7 +48,6 @@ public class PenalidadController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PenalidadDto> update(@PathVariable Integer id, @RequestBody PenalidadDto penalidad) throws Exception {
-        penalidad.setIdPenalidad(id);
         Penalidad entity = modelMapper.map(penalidad, Penalidad.class);
         return ResponseEntity.ok(modelMapper.map(service.update(id, entity), PenalidadDto.class));
     }

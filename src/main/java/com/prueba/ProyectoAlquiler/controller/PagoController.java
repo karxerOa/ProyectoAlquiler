@@ -3,7 +3,6 @@ package com.prueba.ProyectoAlquiler.controller;
 import com.prueba.ProyectoAlquiler.dto.PagoDto;
 import com.prueba.ProyectoAlquiler.model.Pago;
 import com.prueba.ProyectoAlquiler.service.interfaz.IPagoService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.modelmapper.ModelMapper;
@@ -21,11 +20,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/pagos")
-@RequiredArgsConstructor
 public class PagoController {
     private final IPagoService service;
-    @Qualifier("pagoMapper")
     private final ModelMapper modelMapper;
+
+    public PagoController(IPagoService service,
+        @Qualifier("pagoMapper") ModelMapper modelMapper) {
+        this.service = service;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     public ResponseEntity<List<PagoDto>> findAll() throws Exception {
@@ -45,7 +48,7 @@ public class PagoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PagoDto> update(@PathVariable Integer id, @RequestBody PagoDto pago) throws Exception {
-        pago.setIdPago(id);
+        
         Pago entity = modelMapper.map(pago, Pago.class);
         return ResponseEntity.ok(modelMapper.map(service.update(id, entity), PagoDto.class));
     }

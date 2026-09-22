@@ -4,7 +4,6 @@ import com.prueba.ProyectoAlquiler.model.Cliente;
 
 import com.prueba.ProyectoAlquiler.service.interfaz.IClienteService;
 
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -14,13 +13,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
 @RequestMapping("/v1/clientes")
-@RequiredArgsConstructor
 public class ClienteController {
     private final IClienteService service;
-
-    
-    @Qualifier("clienteMapper")
     private final ModelMapper modelMapper;
+
+    public ClienteController(IClienteService service,
+        @Qualifier("clienteMapper") ModelMapper modelMapper) {
+        this.service = service;
+        this.modelMapper = modelMapper;
+    }
     @GetMapping // 200 -> ok
     public ResponseEntity<List<ClienteDto>> findAll() throws Exception{
         return ResponseEntity.ok(service.findAll().stream()

@@ -3,7 +3,6 @@ import com.prueba.ProyectoAlquiler.dto.AlquilerDto;
 import com.prueba.ProyectoAlquiler.model.Alquiler;
 import com.prueba.ProyectoAlquiler.service.interfaz.IAlquilerService;
 
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -14,12 +13,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/alquileres")
-@RequiredArgsConstructor
 public class AlquilerController {
     private final IAlquilerService service;
-    
-    @Qualifier("alquilerMapper")
+
     private final ModelMapper modelMapper;
+
+    public AlquilerController(IAlquilerService service,
+        @Qualifier("alquilerMapper") ModelMapper modelMapper) {
+        this.service = service;
+        this.modelMapper = modelMapper;
+    }
+
     @GetMapping
     public ResponseEntity<List<AlquilerDto>> findAll() throws Exception {
         return ResponseEntity.ok(service.findAll().stream()

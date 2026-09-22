@@ -18,6 +18,11 @@ public class AlquilerDto {
     private String estado;
     private BigDecimal subtotal;
     private BigDecimal total;
+    
     private Integer empleadoId;
     private Integer clienteId;
+
+    private String nombreEmpleado;
+    private String nombreCliente;
+    private String apellidoCliente;
 }

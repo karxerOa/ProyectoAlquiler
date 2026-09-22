@@ -10,10 +10,13 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DevolucionDto {
+
     private Integer idDevolucion;
     private Date fechaDevolucion;
     private String estadoPrenda;
     private String observacion;
+
     private Integer alquilerId;
     private Integer empleadoId;
+
 }

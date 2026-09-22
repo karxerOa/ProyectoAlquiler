@@ -16,5 +16,6 @@ public class PenalidadDto {
     private Integer monto;
     private Date fecha_penalidad;
     private Boolean estado;
+
     private Integer devolucionId;
 }

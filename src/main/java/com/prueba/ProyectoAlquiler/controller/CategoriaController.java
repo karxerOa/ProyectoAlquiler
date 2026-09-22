@@ -3,7 +3,6 @@ package com.prueba.ProyectoAlquiler.controller;
 import com.prueba.ProyectoAlquiler.dto.CategoriaDto;
 import com.prueba.ProyectoAlquiler.model.Categoria;
 import com.prueba.ProyectoAlquiler.service.interfaz.ICategoriaService;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -21,11 +20,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/categorias")
-@RequiredArgsConstructor
 public class CategoriaController {
     private final ICategoriaService service;
-    @Qualifier("categoriaMapper")
     private final ModelMapper modelMapper;
+
+    public CategoriaController(ICategoriaService service,
+        @Qualifier("categoriaMapper") ModelMapper modelMapper) {
+        this.service = service;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     public ResponseEntity<List<CategoriaDto>> findAll() throws Exception {

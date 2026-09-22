@@ -4,7 +4,6 @@ import com.prueba.ProyectoAlquiler.dto.EmpleadoDto;
 import com.prueba.ProyectoAlquiler.model.Empleado;
 import com.prueba.ProyectoAlquiler.service.interfaz.IEmpleadoService;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.modelmapper.ModelMapper;
@@ -14,13 +13,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
 @RequestMapping("/v1/empleados")
-@RequiredArgsConstructor
-
 public class EmpleadoController {
 
     private final IEmpleadoService service;
-    @Qualifier("empleadoMapper")
     private final ModelMapper modelMapper;
+
+    public EmpleadoController(IEmpleadoService service,
+        @Qualifier("empleadoMapper") ModelMapper modelMapper) {
+        this.service = service;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping // 200 -> ok
     public ResponseEntity<List<EmpleadoDto>> findAll() throws Exception{
