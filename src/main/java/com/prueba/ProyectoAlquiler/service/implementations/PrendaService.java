@@ -3,6 +3,7 @@ package com.prueba.ProyectoAlquiler.service.implementations;
 import com.prueba.ProyectoAlquiler.model.Prenda;
 import com.prueba.ProyectoAlquiler.repository.IGenericRepository;
 import com.prueba.ProyectoAlquiler.repository.IPrendaRepository;
+import com.prueba.ProyectoAlquiler.repository.IGenericRepository;
 import com.prueba.ProyectoAlquiler.service.interfaz.IPrendaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

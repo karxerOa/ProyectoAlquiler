@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -36,6 +35,6 @@ public class Pago {
     // relaciones
     @ManyToOne
     @JoinColumn(name = "id_alquiler", nullable = false,
-            foreignKey = @ForeignKey(name = "FK_alquiler_pago"))
+    foreignKey = @ForeignKey(name = "FK_alquiler_pago"))
     private Alquiler alquiler;
 }

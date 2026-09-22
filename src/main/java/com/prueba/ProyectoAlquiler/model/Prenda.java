@@ -1,10 +1,8 @@
 package com.prueba.ProyectoAlquiler.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,17 +13,13 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Prenda {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     @Column(name = "id_prenda", nullable = false)
     private Integer idPrenda;
 
-    @Column(name = "codigo_prenda", nullable = false, unique = true, length = 30)
-    private String codigoPrenda;
-
-    @Column(name = "nombre", nullable = false, length = 100)
+    @Column(name = "nombre_prenda", nullable = false, length = 100)
     private String nombre;
 
     @Column(name = "descripcion", columnDefinition = "TEXT")
@@ -49,12 +43,18 @@ public class Prenda {
             foreignKey = @ForeignKey(name = "FK_categoria_prenda"))
     private Categoria categoria;
 
-    @OneToMany
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "prenda")
     private List<Produccion> producciones;
 
-    @OneToMany
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "prenda")
     private List<Mantenimiento> mantenimientos;
 
-    @OneToMany
-    private List<DetalleAlquiler> detalles;
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "prenda")
+    private List<DetalleAlquiler> detallesAlquiler;
 }

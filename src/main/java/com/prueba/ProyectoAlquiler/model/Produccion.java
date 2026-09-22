@@ -17,6 +17,7 @@ import java.time.LocalDate;
 public class Produccion {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer idProduccion;
 
