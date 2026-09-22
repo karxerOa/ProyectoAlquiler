@@ -19,9 +19,6 @@ public class MapperConfig {
     public ModelMapper alquilerMapper() {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setImplicitMappingEnabled(false);
-        // =========================
-        // Alquiler -> AlquilerDto
-        // =========================
         mapper.createTypeMap(Alquiler.class, AlquilerDto.class)
             .addMapping(Alquiler::getIdAlquiler, AlquilerDto::setIdAlquiler)
             .addMapping(Alquiler::getFechaAlquiler, AlquilerDto::setFechaAlquiler)
@@ -55,11 +52,6 @@ public class MapperConfig {
                 }
                 return destination;
             });
-
-        // =========================
-        // AlquilerDto -> Alquiler
-        // =========================
-
         mapper.createTypeMap(AlquilerDto.class, Alquiler.class)
             .addMapping(AlquilerDto::getIdAlquiler, Alquiler::setIdAlquiler)
             .addMapping(AlquilerDto::getFechaAlquiler, Alquiler::setFechaAlquiler)
@@ -127,7 +119,7 @@ public class MapperConfig {
     public ModelMapper devolucionMapper() {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setImplicitMappingEnabled(false);
-        // Devolucion -> DevolucionDto
+
         mapper.createTypeMap(Devolucion.class, DevolucionDto.class)
             .addMapping(Devolucion::getIdDevolucion, DevolucionDto::setIdDevolucion)
             .addMapping(Devolucion::getFechaDevolucion, DevolucionDto::setFechaDevolucion)
@@ -148,7 +140,7 @@ public class MapperConfig {
                 }
                 return destination;
             });
-        // DevolucionDto -> Devolucion
+
         mapper.createTypeMap(DevolucionDto.class, Devolucion.class)
             .addMapping(DevolucionDto::getIdDevolucion, Devolucion::setIdDevolucion)
             .addMapping(DevolucionDto::getFechaDevolucion, Devolucion::setFechaDevolucion)
@@ -200,9 +192,7 @@ public class MapperConfig {
     public ModelMapper mantenimientoMapper() {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setImplicitMappingEnabled(false);
-        // =========================
-        // Mantenimiento -> MantenimientoDto
-        // =========================
+
         mapper.createTypeMap(Mantenimiento.class, MantenimientoDto.class)
             .addMapping(Mantenimiento::getIdMantenimiento, MantenimientoDto::setIdMantenimiento)
             .addMapping(Mantenimiento::getFechaInicio, MantenimientoDto::setFechaInicio)
@@ -226,9 +216,7 @@ public class MapperConfig {
                 }
                 return destination;
             });
-        // =========================
-        // MantenimientoDto -> Mantenimiento
-        // =========================
+
         mapper.createTypeMap(MantenimientoDto.class, Mantenimiento.class)
             .addMapping(MantenimientoDto::getIdMantenimiento, Mantenimiento::setIdMantenimiento)
             .addMapping(MantenimientoDto::getFechaInicio, Mantenimiento::setFechaInicio)
@@ -261,7 +249,7 @@ public class MapperConfig {
     public ModelMapper pagoMapper() {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setImplicitMappingEnabled(false);
-        // Pago -> PagoDto
+
         mapper.createTypeMap(Pago.class, PagoDto.class)
             .addMapping(Pago::getFechaPago, PagoDto::setFechaPago)
             .addMapping(Pago::getMonto, PagoDto::setMonto)
@@ -277,7 +265,6 @@ public class MapperConfig {
                 }
                 return destination;
             });
-        // PagoDto -> Pago
         mapper.createTypeMap(PagoDto.class, Pago.class)
             .addMapping(PagoDto::getFechaPago, Pago::setFechaPago)
             .addMapping(PagoDto::getMonto, Pago::setMonto)
@@ -298,10 +285,8 @@ public class MapperConfig {
     public ModelMapper penalidadMapper() {
 
         ModelMapper mapper = new ModelMapper();
-
         mapper.getConfiguration().setImplicitMappingEnabled(false);
 
-        // Penalidad -> PenalidadDto
         mapper.createTypeMap(Penalidad.class, PenalidadDto.class)
             .addMapping(Penalidad::getIdPenalidad, PenalidadDto::setIdPenalidad)
             .addMapping(Penalidad::getTipo_penalidad, PenalidadDto::setTipo_penalidad)
@@ -310,7 +295,6 @@ public class MapperConfig {
             .addMapping(Penalidad::getFecha_penalidad, PenalidadDto::setFecha_penalidad)
             .addMapping(Penalidad::getEstado, PenalidadDto::setEstado)
             .setPostConverter(context -> {
-
                 Penalidad source = context.getSource();
                 PenalidadDto destination = context.getDestination();
 
@@ -319,11 +303,9 @@ public class MapperConfig {
                         source.getDevolucion().getIdDevolucion()
                     );
                 }
-
                 return destination;
             });
 
-        // PenalidadDto -> Penalidad
         mapper.createTypeMap(PenalidadDto.class, Penalidad.class)
             .addMapping(PenalidadDto::getIdPenalidad, Penalidad::setIdPenalidad)
             .addMapping(PenalidadDto::getTipo_penalidad, Penalidad::setTipo_penalidad)
@@ -345,12 +327,9 @@ public class MapperConfig {
 
     @Bean
     public ModelMapper prendaMapper() {
-
         ModelMapper mapper = new ModelMapper();
-
         mapper.getConfiguration().setImplicitMappingEnabled(false);
 
-        // Prenda -> PrendaDto
         mapper.createTypeMap(Prenda.class, PrendaDto.class)
             .addMapping(Prenda::getIdPrenda, PrendaDto::setIdPrenda)
             .addMapping(Prenda::getNombre, PrendaDto::setNombre)
@@ -376,7 +355,6 @@ public class MapperConfig {
                 return destination;
             });
 
-        // PrendaDto -> Prenda
         mapper.createTypeMap(PrendaDto.class, Prenda.class)
             .addMapping(PrendaDto::getIdPrenda, Prenda::setIdPrenda)
             .addMapping(PrendaDto::getNombre, Prenda::setNombre)
@@ -402,9 +380,7 @@ public class MapperConfig {
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setImplicitMappingEnabled(false);
-        // =========================
-        // Produccion -> ProduccionDto
-        // =========================
+
         mapper.createTypeMap(Produccion.class, ProduccionDto.class)
             .addMapping(Produccion::getIdProduccion, ProduccionDto::setIdProduccion)
             .addMapping(Produccion::getFechaProduccion, ProduccionDto::setFechaProduccion)
@@ -426,9 +402,7 @@ public class MapperConfig {
                 }
                 return destination;
             });
-        // =========================
-        // ProduccionDto -> Produccion
-        // =========================
+
         mapper.createTypeMap(ProduccionDto.class, Produccion.class)
             .addMapping(ProduccionDto::getIdProduccion, Produccion::setIdProduccion)
             .addMapping(ProduccionDto::getFechaProduccion, Produccion::setFechaProduccion)
@@ -457,12 +431,11 @@ public class MapperConfig {
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setImplicitMappingEnabled(false);
-        // Rol -> RolDto
         mapper.createTypeMap(Rol.class, RolDto.class)
             .addMapping(Rol::getIdRol, RolDto::setIdRol)
             .addMapping(Rol::getName, RolDto::setName)
             .addMapping(Rol::getDescription, RolDto::setDescription);
-        // RolDto -> Rol
+
         mapper.createTypeMap(RolDto.class, Rol.class)
             .addMapping(RolDto::getIdRol, Rol::setIdRol)
             .addMapping(RolDto::getName, Rol::setName)
@@ -476,7 +449,7 @@ public class MapperConfig {
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setImplicitMappingEnabled(false);
-        // Usuario -> UsuarioDto
+
         mapper.createTypeMap(Usuario.class, UsuarioDto.class)
             .addMapping(Usuario::getIdUser, UsuarioDto::setIdUser)
             .addMapping(Usuario::getUsername, UsuarioDto::setUsername)
@@ -497,7 +470,6 @@ public class MapperConfig {
                 return destination;
             });
 
-        // UsuarioDto -> Usuario
         mapper.createTypeMap(UsuarioDto.class, Usuario.class)
             .addMapping(UsuarioDto::getIdUser, Usuario::setIdUser)
             .addMapping(UsuarioDto::getUsername, Usuario::setUsername)
@@ -514,7 +486,6 @@ public class MapperConfig {
 
         return mapper;
     }
-
     private <E, I> Converter<I, E> reference(java.util.function.Supplier<E> constructor,
                                               java.util.function.BiConsumer<E, I> setter) {
         return context -> {
