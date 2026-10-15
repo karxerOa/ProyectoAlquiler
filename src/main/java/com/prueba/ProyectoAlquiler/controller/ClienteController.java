@@ -11,8 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+@CrossOrigin(originPatterns = "http://localhost:*")
 @RestController
 @RequestMapping("/v1/clientes")
+
 public class ClienteController {
     private final IClienteService service;
     private final ModelMapper modelMapper;

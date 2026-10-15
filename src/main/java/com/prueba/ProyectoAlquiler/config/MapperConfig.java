@@ -78,6 +78,51 @@ public class MapperConfig {
     }
 
     @Bean
+    public ModelMapper detalleAlquilerMapper() {
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setImplicitMappingEnabled(false);
+
+        mapper.createTypeMap(DetalleAlquiler.class, DetalleAlquilerDto.class)
+            .addMapping(DetalleAlquiler::getIdDetalle, DetalleAlquilerDto::setIdDetalle)
+            .addMapping(DetalleAlquiler::getCantidad, DetalleAlquilerDto::setCantidad)
+            .addMapping(DetalleAlquiler::getPrecioUnitario, DetalleAlquilerDto::setPrecioUnitario)
+            .addMapping(DetalleAlquiler::getSubtotal, DetalleAlquilerDto::setSubtotal)
+            .setPostConverter(context -> {
+                DetalleAlquiler source = context.getSource();
+                DetalleAlquilerDto destination = context.getDestination();
+                if (source.getAlquiler() != null) {
+                    destination.setAlquilerId(source.getAlquiler().getIdAlquiler());
+                }
+                if (source.getPrenda() != null) {
+                    destination.setPrendaId(source.getPrenda().getIdPrenda());
+                }
+                return destination;
+            });
+
+        mapper.createTypeMap(DetalleAlquilerDto.class, DetalleAlquiler.class)
+            .addMapping(DetalleAlquilerDto::getIdDetalle, DetalleAlquiler::setIdDetalle)
+            .addMapping(DetalleAlquilerDto::getCantidad, DetalleAlquiler::setCantidad)
+            .addMapping(DetalleAlquilerDto::getPrecioUnitario, DetalleAlquiler::setPrecioUnitario)
+            .addMapping(DetalleAlquilerDto::getSubtotal, DetalleAlquiler::setSubtotal)
+            .addMappings(mapping -> {
+                mapping.using(
+                    reference(Alquiler::new, Alquiler::setIdAlquiler)
+                ).map(
+                    DetalleAlquilerDto::getAlquilerId,
+                    DetalleAlquiler::setAlquiler
+                );
+                mapping.using(
+                    reference(Prenda::new, Prenda::setIdPrenda)
+                ).map(
+                    DetalleAlquilerDto::getPrendaId,
+                    DetalleAlquiler::setPrenda
+                );
+            });
+
+        return mapper;
+    }
+
+    @Bean
     public ModelMapper categoriaMapper() {
         ModelMapper mapper = new ModelMapper();
         mapper.createTypeMap(Categoria.class, CategoriaDto.class)
