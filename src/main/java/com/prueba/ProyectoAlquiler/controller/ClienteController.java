@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(originPatterns = "http://localhost:*")
 @RestController
 @RequestMapping("/v1/clientes")
 
