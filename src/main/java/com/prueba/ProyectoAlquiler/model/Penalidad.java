@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -19,13 +19,13 @@ public class Penalidad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer idPenalidad;
-    @Column(nullable = false, unique = true,  length = 50)
+    @Column(nullable = false, length = 50)
     private String tipo_penalidad;
-    @Column(nullable = false, unique = true,  length = 50)
+    @Column(nullable = false, length = 50)
     private String descripcion;
-    @Column(nullable = false)
-    private Integer monto;
-    private Date fecha_penalidad;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private java.math.BigDecimal monto;
+    private LocalDateTime fecha_penalidad;
     private Boolean estado;
 
     // relaciones

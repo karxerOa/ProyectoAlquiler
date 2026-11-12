@@ -43,6 +43,7 @@ public class PrendaController {
 
     @PostMapping
     public ResponseEntity<PrendaDto> save(@RequestBody PrendaDto prenda) throws Exception {
+        prenda.setIdPrenda(null);
         Prenda obj = service.save(modelMapper.map(prenda, Prenda.class));
         return new ResponseEntity<>(modelMapper.map(obj, PrendaDto.class), HttpStatus.CREATED);
     }

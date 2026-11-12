@@ -44,6 +44,7 @@ public class CategoriaController {
 
     @PostMapping
     public ResponseEntity<CategoriaDto> save(@RequestBody CategoriaDto categoria) throws Exception {
+        categoria.setIdCategoria(null);
         Categoria entity = modelMapper.map(categoria, Categoria.class);
         return new ResponseEntity<>(modelMapper.map(service.save(entity), CategoriaDto.class), HttpStatus.CREATED);
     }

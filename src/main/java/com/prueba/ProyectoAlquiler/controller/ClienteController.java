@@ -38,6 +38,7 @@ public class ClienteController {
 
     @PostMapping // 201 --> Created
     public ResponseEntity<ClienteDto> save(@RequestBody ClienteDto cliente) throws Exception{
+        cliente.setIdCliente(null);
         Cliente entity = modelMapper.map(cliente, Cliente.class);
         Cliente obj = service.save(entity);
         return new ResponseEntity<>(modelMapper.map(obj, ClienteDto.class), HttpStatus.CREATED);

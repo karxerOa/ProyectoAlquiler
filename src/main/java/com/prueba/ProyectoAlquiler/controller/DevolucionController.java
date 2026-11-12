@@ -44,6 +44,7 @@ public class DevolucionController {
 
     @PostMapping
     public ResponseEntity<DevolucionDto> save(@RequestBody DevolucionDto devolucion) throws Exception {
+        devolucion.setIdDevolucion(null);
         Devolucion entity = modelMapper.map(devolucion, Devolucion.class);
         return new ResponseEntity<>(modelMapper.map(service.save(entity), DevolucionDto.class), HttpStatus.CREATED);
     }

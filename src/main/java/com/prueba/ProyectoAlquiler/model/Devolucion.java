@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -20,9 +20,9 @@ public class Devolucion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer idDevolucion;
-    @Column(nullable = false, unique = true,  length = 50)
-    private Date fechaDevolucion;
-    @Column(nullable = false, unique = true,  length = 50)
+    @Column(nullable = false, length = 50)
+    private LocalDateTime fechaDevolucion;
+    @Column(nullable = false, length = 50)
     private String estadoPrenda;
     @Column(nullable = false)
     private String observacion;
@@ -38,6 +38,8 @@ public class Devolucion {
             foreignKey = @ForeignKey(name = "FK_trabajador_devolucion"))
     private Empleado empleado;
 
-    @OneToMany
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    @lombok.ToString.Exclude
+    @OneToMany(mappedBy = "devolucion")
     private List<Penalidad> penalidades;
 }

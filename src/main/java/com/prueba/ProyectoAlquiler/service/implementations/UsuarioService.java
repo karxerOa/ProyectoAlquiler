@@ -11,6 +11,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UsuarioService extends GenericService<Usuario, Integer> implements IUsuarioService {
     private final IUsuarioRepository repo;
+    private final org.springframework.security.crypto.password.PasswordEncoder encoder;
+    @Override public Usuario save(Usuario u) throws Exception {
+        validatePassword(u.getPassword());
+        u.setPassword(encoder.encode(u.getPassword()));
+        return super.save(u);
+    }
+    @Override public Usuario update(Integer id, Usuario u) throws Exception {
+        Usuario old=findById(id);
+        u.setIdUser(id);
+        if(u.getPassword()==null || u.getPassword().isBlank()) u.setPassword(old.getPassword());
+        else {validatePassword(u.getPassword());u.setPassword(encoder.encode(u.getPassword()));}
+        return super.update(id,u);
+    }
+    private void validatePassword(String password){
+        if(password==null || password.length()<8 || password.getBytes(java.nio.charset.StandardCharsets.UTF_8).length>72)
+            throw new IllegalArgumentException("La clave debe tener al menos 8 caracteres y como maximo 72 bytes");
+    }
 
     @Override
     protected IGenericRepository<Usuario, Integer> getRepo() {

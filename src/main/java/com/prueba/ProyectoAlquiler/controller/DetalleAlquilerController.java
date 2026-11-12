@@ -39,6 +39,7 @@ public class DetalleAlquilerController {
     @PostMapping
     public ResponseEntity<DetalleAlquilerDto> save(@RequestBody DetalleAlquilerDto detalleAlquiler)
         throws Exception {
+        detalleAlquiler.setIdDetalle(null);
         DetalleAlquiler entity = modelMapper.map(detalleAlquiler, DetalleAlquiler.class);
         return new ResponseEntity<>(
             modelMapper.map(service.save(entity), DetalleAlquilerDto.class),

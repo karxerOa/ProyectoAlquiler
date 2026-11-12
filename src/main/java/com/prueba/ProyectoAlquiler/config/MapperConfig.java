@@ -296,6 +296,7 @@ public class MapperConfig {
         mapper.getConfiguration().setImplicitMappingEnabled(false);
 
         mapper.createTypeMap(Pago.class, PagoDto.class)
+            .addMapping(Pago::getIdPago, PagoDto::setIdPago)
             .addMapping(Pago::getFechaPago, PagoDto::setFechaPago)
             .addMapping(Pago::getMonto, PagoDto::setMonto)
             .addMapping(Pago::getMetodoPago, PagoDto::setMetodoPago)
@@ -311,6 +312,7 @@ public class MapperConfig {
                 return destination;
             });
         mapper.createTypeMap(PagoDto.class, Pago.class)
+            .addMapping(PagoDto::getIdPago, Pago::setIdPago)
             .addMapping(PagoDto::getFechaPago, Pago::setFechaPago)
             .addMapping(PagoDto::getMonto, Pago::setMonto)
             .addMapping(PagoDto::getMetodoPago, Pago::setMetodoPago)
@@ -498,9 +500,9 @@ public class MapperConfig {
         mapper.createTypeMap(Usuario.class, UsuarioDto.class)
             .addMapping(Usuario::getIdUser, UsuarioDto::setIdUser)
             .addMapping(Usuario::getUsername, UsuarioDto::setUsername)
-            .addMapping(Usuario::getPassword, UsuarioDto::setPassword)
+
             .addMapping(Usuario::isEnabled, UsuarioDto::setEnabled)
-            .setPostConverter(context -> { 
+            .setPostConverter(context -> {
                 Usuario source = context.getSource();
                 UsuarioDto destination = context.getDestination();
                 if (source.getRol() != null) {

@@ -36,6 +36,7 @@ public class AlquilerController {
     }
     @PostMapping
     public ResponseEntity<AlquilerDto> save(@RequestBody AlquilerDto alquiler) throws Exception {
+        alquiler.setIdAlquiler(null);
         Alquiler entity = modelMapper.map(alquiler, Alquiler.class);
         Alquiler obj = service.save(entity);
         return new ResponseEntity<>(modelMapper.map(obj, AlquilerDto.class), HttpStatus.CREATED);

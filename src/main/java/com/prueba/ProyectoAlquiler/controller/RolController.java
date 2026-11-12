@@ -42,6 +42,7 @@ public class RolController {
 
     @PostMapping
     public ResponseEntity<RolDto> save(@RequestBody RolDto rol) throws Exception {
+        rol.setIdRol(null);
         Rol entity = modelMapper.map(rol, Rol.class);
         return new ResponseEntity<>(modelMapper.map(service.save(entity), RolDto.class), HttpStatus.CREATED);
     }
