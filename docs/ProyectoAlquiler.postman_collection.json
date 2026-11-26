@@ -1,0 +1,1398 @@
+{
+  "info": {
+    "name": "ProyectoAlquiler - CRUD y JWT",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:9494"
+    },
+    {
+      "key": "username",
+      "value": "admin"
+    },
+    {
+      "key": "password",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Login ADMIN",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/login",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Login 200\",()=>pm.response.to.have.status(200));",
+              "if(pm.response.code===200) pm.collectionVariables.set(\"token\",pm.response.json().access_token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Obtener rol de empleado",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/v1/roles"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const empleado = pm.response.json().find(r => ['EMPLEADO', 'ROLE_EMPLEADO'].includes(r.name.toUpperCase()));",
+              "pm.expect(empleado).to.exist;",
+              "pm.collectionVariables.set('empleadoRolId', empleado.idRol);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "categorias",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/categorias",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Trajes\",\n  \"descripcion\": \"Prueba\",\n  \"estado\": \"ACTIVO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"categoriasId\",pm.response.json().idCategoria);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/categorias"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/categorias/{{categoriasId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/categorias/{{categoriasId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Trajes\",\n  \"descripcion\": \"Prueba\",\n  \"estado\": \"ACTIVO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "clientes",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/clientes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ana\",\n  \"apellidos\": \"Perez\",\n  \"dni\": \"01234567\",\n  \"telefono\": \"987654321\",\n  \"direccion\": \"Lima\",\n  \"correo\": \"test@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"clientesId\",pm.response.json().idCliente);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/clientes"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/clientes/{{clientesId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/clientes/{{clientesId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ana\",\n  \"apellidos\": \"Perez\",\n  \"dni\": \"01234567\",\n  \"telefono\": \"987654321\",\n  \"direccion\": \"Lima\",\n  \"correo\": \"test@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "empleados",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/empleados",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombres\": \"Luis\",\n  \"apellidos\": \"Perez\",\n  \"dni\": \"12345678\",\n  \"telefono\": \"987654322\",\n  \"cargo\": \"Atencion\",\n  \"estado\": \"ACTIVO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"empleadosId\",pm.response.json().idEmpleado);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/empleados"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/empleados/{{empleadosId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/empleados/{{empleadosId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombres\": \"Luis\",\n  \"apellidos\": \"Perez\",\n  \"dni\": \"12345678\",\n  \"telefono\": \"987654322\",\n  \"cargo\": \"Atencion\",\n  \"estado\": \"ACTIVO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "roles",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/roles",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"AUDITOR\",\n  \"description\": \"Prueba CRUD\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"rolesId\",pm.response.json().idRol);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/roles"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/roles/{{rolesId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/roles/{{rolesId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"AUDITOR\",\n  \"description\": \"Prueba CRUD\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "usuarios",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/usuarios",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"cruduser\",\n  \"password\": \"TestPassword123!\",\n  \"enabled\": true,\n  \"rolId\": \"{{empleadoRolId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"usuariosId\",pm.response.json().idUser);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/usuarios"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/usuarios/{{usuariosId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/usuarios/{{usuariosId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"cruduser\",\n  \"password\": \"TestPassword123!\",\n  \"enabled\": true,\n  \"rolId\": \"{{empleadoRolId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "prendas",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/prendas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Traje\",\n  \"descripcion\": \"Prueba\",\n  \"talla\": \"M\",\n  \"color\": \"Azul\",\n  \"precioAlquiler\": 50,\n  \"estado\": \"DISPONIBLE\",\n  \"categoriaId\": \"{{categoriasId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"prendasId\",pm.response.json().idPrenda);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/prendas"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/prendas/{{prendasId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/prendas/{{prendasId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Traje\",\n  \"descripcion\": \"Prueba\",\n  \"talla\": \"M\",\n  \"color\": \"Azul\",\n  \"precioAlquiler\": 50,\n  \"estado\": \"DISPONIBLE\",\n  \"categoriaId\": \"{{categoriasId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "alquileres",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/alquileres",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaAlquiler\": \"2026-11-11\",\n  \"fechaInicio\": \"2026-11-12\",\n  \"fechaFin\": \"2026-11-13\",\n  \"estado\": \"RESERVADO\",\n  \"subtotal\": 50,\n  \"total\": 50,\n  \"empleadoId\": \"{{empleadosId}}\",\n  \"clienteId\": \"{{clientesId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"alquileresId\",pm.response.json().idAlquiler);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/alquileres"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/alquileres/{{alquileresId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/alquileres/{{alquileresId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaAlquiler\": \"2026-11-11\",\n  \"fechaInicio\": \"2026-11-12\",\n  \"fechaFin\": \"2026-11-13\",\n  \"estado\": \"RESERVADO\",\n  \"subtotal\": 50,\n  \"total\": 50,\n  \"empleadoId\": \"{{empleadosId}}\",\n  \"clienteId\": \"{{clientesId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "detalles-alquiler",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/detalles-alquiler",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cantidad\": 1,\n  \"precioUnitario\": 50,\n  \"subtotal\": 50,\n  \"alquilerId\": \"{{alquileresId}}\",\n  \"prendaId\": \"{{prendasId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"detalles-alquilerId\",pm.response.json().idDetalle);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/detalles-alquiler"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/detalles-alquiler/{{detalles-alquilerId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/detalles-alquiler/{{detalles-alquilerId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cantidad\": 1,\n  \"precioUnitario\": 50,\n  \"subtotal\": 50,\n  \"alquilerId\": \"{{alquileresId}}\",\n  \"prendaId\": \"{{prendasId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "pagos",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/pagos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaPago\": \"2026-11-11\",\n  \"monto\": 50,\n  \"metodoPago\": \"EFECTIVO\",\n  \"estado\": \"PAGADO\",\n  \"alquilerId\": \"{{alquileresId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"pagosId\",pm.response.json().idPago);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/pagos"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/pagos/{{pagosId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/pagos/{{pagosId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaPago\": \"2026-11-11\",\n  \"monto\": 50,\n  \"metodoPago\": \"EFECTIVO\",\n  \"estado\": \"PAGADO\",\n  \"alquilerId\": \"{{alquileresId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "devoluciones",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/devoluciones",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaDevolucion\": \"2026-11-13T18:00:00\",\n  \"estadoPrenda\": \"BUENO\",\n  \"observacion\": \"Sin problemas\",\n  \"alquilerId\": \"{{alquileresId}}\",\n  \"empleadoId\": \"{{empleadosId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"devolucionesId\",pm.response.json().idDevolucion);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/devoluciones"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/devoluciones/{{devolucionesId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/devoluciones/{{devolucionesId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaDevolucion\": \"2026-11-13T18:00:00\",\n  \"estadoPrenda\": \"BUENO\",\n  \"observacion\": \"Sin problemas\",\n  \"alquilerId\": \"{{alquileresId}}\",\n  \"empleadoId\": \"{{empleadosId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "penalidades",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/penalidades",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo_penalidad\": \"RETRASO\",\n  \"descripcion\": \"Un dia\",\n  \"monto\": 10.5,\n  \"fecha_penalidad\": \"2026-11-13T18:00:00\",\n  \"estado\": true,\n  \"devolucionId\": \"{{devolucionesId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"penalidadesId\",pm.response.json().idPenalidad);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/penalidades"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/penalidades/{{penalidadesId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/penalidades/{{penalidadesId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo_penalidad\": \"RETRASO\",\n  \"descripcion\": \"Un dia\",\n  \"monto\": 10.5,\n  \"fecha_penalidad\": \"2026-11-13T18:00:00\",\n  \"estado\": true,\n  \"devolucionId\": \"{{devolucionesId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "mantenimientos",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/mantenimientos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaInicio\": \"2026-11-14\",\n  \"fechaFin\": \"2026-11-15\",\n  \"tipoMantenimiento\": \"LAVADO\",\n  \"descripcion\": \"Lavado\",\n  \"costo\": 10,\n  \"estado\": \"PENDIENTE\",\n  \"prendaId\": \"{{prendasId}}\",\n  \"empleadoId\": \"{{empleadosId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"mantenimientosId\",pm.response.json().idMantenimiento);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/mantenimientos"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/mantenimientos/{{mantenimientosId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/mantenimientos/{{mantenimientosId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaInicio\": \"2026-11-14\",\n  \"fechaFin\": \"2026-11-15\",\n  \"tipoMantenimiento\": \"LAVADO\",\n  \"descripcion\": \"Lavado\",\n  \"costo\": 10,\n  \"estado\": \"PENDIENTE\",\n  \"prendaId\": \"{{prendasId}}\",\n  \"empleadoId\": \"{{empleadosId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "producciones",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/producciones",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaProduccion\": \"2026-11-11\",\n  \"cantidad\": 1,\n  \"costoProduccion\": 100,\n  \"descripcion\": \"Confeccion\",\n  \"idPrenda\": \"{{prendasId}}\",\n  \"idEmpleado\": \"{{empleadosId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Creado\",()=>pm.response.to.have.status(201));",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"produccionesId\",pm.response.json().idProduccion);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/producciones"
+          }
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/producciones/{{produccionesId}}"
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/producciones/{{produccionesId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaProduccion\": \"2026-11-11\",\n  \"cantidad\": 1,\n  \"costoProduccion\": 100,\n  \"descripcion\": \"Confeccion\",\n  \"idPrenda\": \"{{prendasId}}\",\n  \"idEmpleado\": \"{{empleadosId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Eliminar en orden inverso (solo datos de prueba)",
+      "item": [
+        {
+          "name": "Eliminar producciones",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/producciones/{{produccionesId}}"
+          }
+        },
+        {
+          "name": "Eliminar mantenimientos",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/mantenimientos/{{mantenimientosId}}"
+          }
+        },
+        {
+          "name": "Eliminar penalidades",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/penalidades/{{penalidadesId}}"
+          }
+        },
+        {
+          "name": "Eliminar devoluciones",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/devoluciones/{{devolucionesId}}"
+          }
+        },
+        {
+          "name": "Eliminar pagos",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/pagos/{{pagosId}}"
+          }
+        },
+        {
+          "name": "Eliminar detalles-alquiler",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/detalles-alquiler/{{detalles-alquilerId}}"
+          }
+        },
+        {
+          "name": "Eliminar alquileres",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/alquileres/{{alquileresId}}"
+          }
+        },
+        {
+          "name": "Eliminar prendas",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/prendas/{{prendasId}}"
+          }
+        },
+        {
+          "name": "Eliminar usuarios",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/usuarios/{{usuariosId}}"
+          }
+        },
+        {
+          "name": "Eliminar roles",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/roles/{{rolesId}}"
+          }
+        },
+        {
+          "name": "Eliminar empleados",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/empleados/{{empleadosId}}"
+          }
+        },
+        {
+          "name": "Eliminar clientes",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/clientes/{{clientesId}}"
+          }
+        },
+        {
+          "name": "Eliminar categorias",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/v1/categorias/{{categoriasId}}"
+          }
+        }
+      ]
+    }
+  ]
+}

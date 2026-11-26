@@ -78,6 +78,51 @@ public class MapperConfig {
     }
 
     @Bean
+    public ModelMapper detalleAlquilerMapper() {
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setImplicitMappingEnabled(false);
+
+        mapper.createTypeMap(DetalleAlquiler.class, DetalleAlquilerDto.class)
+            .addMapping(DetalleAlquiler::getIdDetalle, DetalleAlquilerDto::setIdDetalle)
+            .addMapping(DetalleAlquiler::getCantidad, DetalleAlquilerDto::setCantidad)
+            .addMapping(DetalleAlquiler::getPrecioUnitario, DetalleAlquilerDto::setPrecioUnitario)
+            .addMapping(DetalleAlquiler::getSubtotal, DetalleAlquilerDto::setSubtotal)
+            .setPostConverter(context -> {
+                DetalleAlquiler source = context.getSource();
+                DetalleAlquilerDto destination = context.getDestination();
+                if (source.getAlquiler() != null) {
+                    destination.setAlquilerId(source.getAlquiler().getIdAlquiler());
+                }
+                if (source.getPrenda() != null) {
+                    destination.setPrendaId(source.getPrenda().getIdPrenda());
+                }
+                return destination;
+            });
+
+        mapper.createTypeMap(DetalleAlquilerDto.class, DetalleAlquiler.class)
+            .addMapping(DetalleAlquilerDto::getIdDetalle, DetalleAlquiler::setIdDetalle)
+            .addMapping(DetalleAlquilerDto::getCantidad, DetalleAlquiler::setCantidad)
+            .addMapping(DetalleAlquilerDto::getPrecioUnitario, DetalleAlquiler::setPrecioUnitario)
+            .addMapping(DetalleAlquilerDto::getSubtotal, DetalleAlquiler::setSubtotal)
+            .addMappings(mapping -> {
+                mapping.using(
+                    reference(Alquiler::new, Alquiler::setIdAlquiler)
+                ).map(
+                    DetalleAlquilerDto::getAlquilerId,
+                    DetalleAlquiler::setAlquiler
+                );
+                mapping.using(
+                    reference(Prenda::new, Prenda::setIdPrenda)
+                ).map(
+                    DetalleAlquilerDto::getPrendaId,
+                    DetalleAlquiler::setPrenda
+                );
+            });
+
+        return mapper;
+    }
+
+    @Bean
     public ModelMapper categoriaMapper() {
         ModelMapper mapper = new ModelMapper();
         mapper.createTypeMap(Categoria.class, CategoriaDto.class)
@@ -169,6 +214,7 @@ public class MapperConfig {
     @Bean
     public ModelMapper empleadoMapper() {
         ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setImplicitMappingEnabled(false);
         mapper.createTypeMap(Empleado.class, EmpleadoDto.class)
                 .addMapping(Empleado::getIdEmpleado, EmpleadoDto::setIdEmpleado)
                 .addMapping(Empleado::getNombres, EmpleadoDto::setNombres)
@@ -176,7 +222,16 @@ public class MapperConfig {
                 .addMapping(Empleado::getDni, EmpleadoDto::setDni)
                 .addMapping(Empleado::getTelefono, EmpleadoDto::setTelefono)
                 .addMapping(Empleado::getCargo, EmpleadoDto::setCargo)
-                .addMapping(Empleado::getEstado, EmpleadoDto::setEstado);
+                .addMapping(Empleado::getEstado, EmpleadoDto::setEstado)
+                .setPostConverter(context -> {
+                    Empleado source = context.getSource();
+                    EmpleadoDto destination = context.getDestination();
+                    if (source.getUsuario() != null) {
+                        destination.setIdUser(source.getUsuario().getIdUser());
+                        destination.setUsername(source.getUsuario().getUsername());
+                    }
+                    return destination;
+                });
         mapper.createTypeMap(EmpleadoDto.class, Empleado.class)
                 .addMapping(EmpleadoDto::getIdEmpleado, Empleado::setIdEmpleado)
                 .addMapping(EmpleadoDto::getNombres, Empleado::setNombres)
@@ -251,6 +306,7 @@ public class MapperConfig {
         mapper.getConfiguration().setImplicitMappingEnabled(false);
 
         mapper.createTypeMap(Pago.class, PagoDto.class)
+            .addMapping(Pago::getIdPago, PagoDto::setIdPago)
             .addMapping(Pago::getFechaPago, PagoDto::setFechaPago)
             .addMapping(Pago::getMonto, PagoDto::setMonto)
             .addMapping(Pago::getMetodoPago, PagoDto::setMetodoPago)
@@ -266,6 +322,7 @@ public class MapperConfig {
                 return destination;
             });
         mapper.createTypeMap(PagoDto.class, Pago.class)
+            .addMapping(PagoDto::getIdPago, Pago::setIdPago)
             .addMapping(PagoDto::getFechaPago, Pago::setFechaPago)
             .addMapping(PagoDto::getMonto, Pago::setMonto)
             .addMapping(PagoDto::getMetodoPago, Pago::setMetodoPago)
@@ -338,6 +395,7 @@ public class MapperConfig {
             .addMapping(Prenda::getColor, PrendaDto::setColor)
             .addMapping(Prenda::getPrecioAlquiler, PrendaDto::setPrecioAlquiler)
             .addMapping(Prenda::getEstado, PrendaDto::setEstado)
+            .addMapping(Prenda::getImagen, PrendaDto::setImagen)
             .setPostConverter(context -> {
                 Prenda source = context.getSource();
                 PrendaDto destination = context.getDestination();
@@ -363,6 +421,7 @@ public class MapperConfig {
             .addMapping(PrendaDto::getColor, Prenda::setColor)
             .addMapping(PrendaDto::getPrecioAlquiler, Prenda::setPrecioAlquiler)
             .addMapping(PrendaDto::getEstado, Prenda::setEstado)
+            .addMapping(PrendaDto::getImagen, Prenda::setImagen)
             .addMappings(mapping -> {
                 mapping.using(
                     reference(Categoria::new, Categoria::setIdCategoria)
@@ -453,9 +512,9 @@ public class MapperConfig {
         mapper.createTypeMap(Usuario.class, UsuarioDto.class)
             .addMapping(Usuario::getIdUser, UsuarioDto::setIdUser)
             .addMapping(Usuario::getUsername, UsuarioDto::setUsername)
-            .addMapping(Usuario::getPassword, UsuarioDto::setPassword)
+
             .addMapping(Usuario::isEnabled, UsuarioDto::setEnabled)
-            .setPostConverter(context -> { 
+            .setPostConverter(context -> {
                 Usuario source = context.getSource();
                 UsuarioDto destination = context.getDestination();
                 if (source.getRol() != null) {

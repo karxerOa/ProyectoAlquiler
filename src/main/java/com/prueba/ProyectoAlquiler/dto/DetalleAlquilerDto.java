@@ -11,19 +11,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class DetalleAlquilerDto {
     private Integer idDetalle;
-    private Integer cantidad;
+    private int cantidad;
     private BigDecimal precioUnitario;
     private BigDecimal subtotal;
-
     private Integer alquilerId;
     private Integer prendaId;
-
-    private String codigoPrenda;
-    private String nombrePrenda;
-    private String talla;
-    private String color;
-
-    private String estadoAlquiler;
-    private String nombresCliente;
-    private String apellidosCliente;
 }

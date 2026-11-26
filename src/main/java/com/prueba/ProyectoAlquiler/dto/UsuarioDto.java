@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 public class UsuarioDto {
     private Integer idUser;
     private String username;
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
+    @lombok.ToString.Exclude
     private String password;
     private boolean enabled;
 

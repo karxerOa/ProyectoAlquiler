@@ -39,6 +39,7 @@ public class ProduccionController {
 
     @PostMapping
     public ResponseEntity<ProduccionDto> save(@RequestBody ProduccionDto produccion) throws Exception {
+        produccion.setIdProduccion(null);
         Produccion entity = modelMapper.map(produccion, Produccion.class);
         Produccion obj = service.save(entity);
         return new ResponseEntity<>(modelMapper.map(obj, ProduccionDto.class), HttpStatus.CREATED);

@@ -42,13 +42,15 @@ public class PagoController {
 
     @PostMapping
     public ResponseEntity<PagoDto> save(@RequestBody PagoDto pago) throws Exception {
+        pago.setIdPago(null);
         Pago entity = modelMapper.map(pago, Pago.class);
         return new ResponseEntity<>(modelMapper.map(service.save(entity), PagoDto.class), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PagoDto> update(@PathVariable Integer id, @RequestBody PagoDto pago) throws Exception {
-        
+        pago.setIdPago(id);
+
         Pago entity = modelMapper.map(pago, Pago.class);
         return ResponseEntity.ok(modelMapper.map(service.update(id, entity), PagoDto.class));
     }

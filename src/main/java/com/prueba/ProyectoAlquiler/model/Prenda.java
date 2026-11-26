@@ -37,6 +37,11 @@ public class Prenda {
     @Column(name = "estado", nullable = false, length = 20)
     private String estado;
 
+    @JsonIgnore
+    @ToString.Exclude
+    @Column(columnDefinition = "TEXT")
+    private String imagen;
+
     // relaciones
     @ManyToOne
     @JoinColumn(name = "id_categoria", nullable = false,

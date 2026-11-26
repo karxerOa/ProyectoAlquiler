@@ -8,9 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/v1/empleados")
 public class EmpleadoController {
@@ -34,16 +36,30 @@ public class EmpleadoController {
         return ResponseEntity.ok(modelMapper.map(service.findById(id), EmpleadoDto.class));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<EmpleadoDto> findCurrentEmployee(Authentication authentication) throws Exception {
+        return ResponseEntity.ok(modelMapper.map(
+                service.findByUsuarioUsername(authentication.getName()), EmpleadoDto.class));
+    }
+
     @PostMapping // 201 --> Created
     public ResponseEntity<EmpleadoDto> save(@RequestBody EmpleadoDto empleado) throws Exception{
-        Empleado obj = service.save(modelMapper.map(empleado, Empleado.class));
+        empleado.setIdEmpleado(null);
+        Empleado obj = service.createWithAccount(
+                modelMapper.map(empleado, Empleado.class),
+                empleado.getUsername(),
+                empleado.getPassword());
         return new ResponseEntity<>(modelMapper.map(obj, EmpleadoDto.class), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}") // 200 ok
     public ResponseEntity<EmpleadoDto> update(@PathVariable Integer id, @RequestBody EmpleadoDto empleado) throws Exception{
         empleado.setIdEmpleado(id);
-        Empleado obj = service.update(id, modelMapper.map(empleado, Empleado.class));
+        Empleado obj = service.updateWithAccount(
+                id,
+                modelMapper.map(empleado, Empleado.class),
+                empleado.getUsername(),
+                empleado.getPassword());
         return ResponseEntity.ok(modelMapper.map(obj, EmpleadoDto.class));
     }
 

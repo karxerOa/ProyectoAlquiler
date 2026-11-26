@@ -45,7 +45,7 @@ public class Mantenimiento {
     private Prenda prenda;
 
     @ManyToOne
-    @JoinColumn(name = "idEmpeado", nullable = false, foreignKey = @ForeignKey(name = "FK_trabajador_mantenimiento"))
+    @JoinColumn(name = "id_empleado", nullable = false, foreignKey = @ForeignKey(name = "FK_trabajador_mantenimiento"))
     private Empleado empleado;
 
 }

@@ -1,0 +1,73 @@
+package com.prueba.ProyectoAlquiler.security;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+//Clase S1
+@Component
+public class JwtTokenUtil {
+
+    //MÃ©todos para generar y validar tokens JWT
+    private final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 * 1000; // 5 horas en milisegundos
+
+    @Value("${jwt.secret}")
+    private String secret;
+
+    @jakarta.annotation.PostConstruct
+    void validateConfiguration(){
+        Keys.hmacShaKeyFor(secret.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+    }
+
+    public String generateToken(UserDetails userDetails) {
+        //Payload
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","))); //ADMIN,DBA
+
+
+
+        //Generar el token
+        return Jwts.builder()
+                .claims(claims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes(java.nio.charset.StandardCharsets.UTF_8)))
+                .compact();
+    }
+
+    //utils
+    public Claims getAllClaimsFromToken(String token){
+        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
+    }
+
+    public String getUsernameFromToken(String token) {
+        return getAllClaimsFromToken(token).getSubject();
+    }
+
+    public Date getExpirationDateFromToken(String token) {
+        return getAllClaimsFromToken(token).getExpiration();
+    }
+
+    private boolean isTokenExpired(String token){
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
+
+    public boolean validateToken(String token, UserDetails userDetails){
+        final String username = getUsernameFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+}

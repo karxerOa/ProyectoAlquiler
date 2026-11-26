@@ -21,9 +21,9 @@ public class Cliente {
     @Column(nullable = false,  length = 50)
     private String apellidos;
     @Column(nullable = false, unique = true)
-    private Integer dni;
-    @Column(nullable = false, unique = true)
-    private Integer telefono;
+    private String dni;
+    @Column(nullable = false)
+    private String telefono;
 
     @Column(nullable = false,  length = 100)
     private String direccion;
