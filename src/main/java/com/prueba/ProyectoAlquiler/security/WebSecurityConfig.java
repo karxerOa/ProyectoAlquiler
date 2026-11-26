@@ -25,7 +25,7 @@ public class WebSecurityConfig {
    .authorizeHttpRequests(r->r.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
     .requestMatchers("/login","/registro","/v3/api-docs/**","/swagger-ui/**","/swagger-ui.html","/error").permitAll()
     .requestMatchers("/v1/usuarios/**","/v1/roles/**").hasRole("ADMIN")
-    .requestMatchers(HttpMethod.GET,"/v1/**").hasAnyRole("ADMIN","EMPLEADO","USER")
+    .requestMatchers(HttpMethod.GET,"/v1/mi-cuenta/prendas").hasRole("USER")
     .requestMatchers("/v1/**").hasAnyRole("ADMIN","EMPLEADO").anyRequest().authenticated())
    .exceptionHandling(e->e.authenticationEntryPoint(entry).accessDeniedHandler((req,res,ex)->{res.setStatus(403);res.setContentType("application/json");res.getWriter().write("{\"message\":\"Acceso denegado\"}");}))
    .addFilterBefore(filter,UsernamePasswordAuthenticationFilter.class).build();

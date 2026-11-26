@@ -49,7 +49,7 @@ class PruebaSpringApplicationTests {
   String reader=login("reader");
   assertEquals(403,call("POST","/v1/categorias","{}",reader).statusCode());
   assertEquals(403,call("GET","/v1/usuarios",null,reader).statusCode());
-  assertEquals(200,call("GET","/v1/categorias",null,reader).statusCode());
+  assertEquals(403,call("GET","/v1/categorias",null,reader).statusCode());
   assertEquals(404,call("GET","/v1/categorias/999999",null,token).statusCode());
   assertEquals(400,call("POST","/v1/categorias","{",token).statusCode());
   assertEquals(200,call("GET","/v3/api-docs",null,null).statusCode());
@@ -67,6 +67,37 @@ class PruebaSpringApplicationTests {
    assertEquals(404,call("PUT","/v1/"+row[0]+"/999999",body,token).statusCode());
    assertEquals(200,call("GET","/v1/"+row[0],null,token).statusCode());
   }
+  String mine = "/v1/mi-cuenta/prendas";
+  assertEquals("[]", call("GET", mine, null, reader).body());
+  var readerAccount = userRepo.findOneByUsername("reader");
+  int roleId = readerAccount.getRol().getIdRol();
+  String profile = """
+      {"username":"reader","enabled":true,"rolId":%d,"clienteId":%d}
+      """.formatted(roleId, ids.get("clientes"));
+  String accountPath = "/v1/usuarios/" + readerAccount.getIdUser();
+  assertEquals(200, call("PUT", accountPath, profile, token).statusCode());
+  var own = call("GET", mine, null, reader);
+  assertEquals(200, own.statusCode());
+  assertEquals(ids.get("detalles-alquiler").intValue(), id(own.body(), "idDetalle"));
+  String registration = """
+      {"username":"secondreader","password":"TestPassword123!","clienteId":%d}
+      """.formatted(ids.get("clientes"));
+  var second = call("POST", "/registro", registration, null);
+  assertEquals(201, second.statusCode(), second.body());
+  assertEquals("[]", call("GET", mine, null, login("secondreader")).body());
+  var employee = new Usuario();
+  employee.setUsername("testemployee");
+  employee.setPassword("TestPassword123!");
+  employee.setEnabled(true);
+  employee.setRol(roles.findAll().stream().filter(r -> r.getName().equals("EMPLEADO")).findFirst().orElseThrow());
+  users.save(employee);
+  String staff = login("testemployee");
+  assertEquals(200, call("GET", "/v1/alquileres", null, staff).statusCode());
+  assertEquals(403, call("GET", "/v1/usuarios", null, staff).statusCode());
+  String unlinked = """
+      {"username":"reader","enabled":true,"rolId":%d}
+      """.formatted(roleId);
+  assertEquals(200, call("PUT", accountPath, unlinked, token).statusCode());
   for(int i=data.length-1;i>=0;i--){String path="/v1/"+data[i][0]+"/"+ids.get(data[i][0]);var d=call("DELETE",path,null,token);assertEquals(204,d.statusCode(),d.body());assertTrue(d.body().isEmpty());assertEquals(404,call("DELETE",path,null,token).statusCode());}
   var u=userRepo.findOneByUsername("reader");u.setEnabled(false);userRepo.save(u);
   assertEquals(401,call("GET","/v1/categorias",null,reader).statusCode());

@@ -17,10 +17,16 @@ public class LoginController {
   var result=auth.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
   return ResponseEntity.ok(new JwtResponse(tokens.generateToken((UserDetails) result.getPrincipal())));
  }
- @PostMapping("/registro") public ResponseEntity<UsuarioDto> register(@RequestBody UsuarioDto dto) throws Exception {
-  if(dto.getUsername()==null || dto.getUsername().isBlank()) throw new IllegalArgumentException("Username obligatorio");
+ @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
+ public record Registro(String username, String password) {}
+ @PostMapping("/registro") public ResponseEntity<UsuarioDto> register(@RequestBody Registro dto) throws Exception {
+  if(dto.username()==null || dto.username().isBlank()) throw new IllegalArgumentException("Username obligatorio");
   var role=roles.findAll().stream().filter(r->"USER".equals(r.getName()) || "ROLE_USER".equals(r.getName())).findFirst().orElseThrow(()->new IllegalStateException("Configurar rol USER antes del registro"));
-  Usuario user=mapper.map(dto,Usuario.class);user.setIdUser(null);user.setEnabled(true);user.setRol(role);
+  Usuario user = new Usuario();
+  user.setUsername(dto.username());
+  user.setPassword(dto.password());
+  user.setEnabled(true);
+  user.setRol(role);
   return ResponseEntity.status(201).body(mapper.map(users.save(user),UsuarioDto.class));
  }
 }
