@@ -22,9 +22,9 @@ public class Empleado {
     @Column(nullable = false,  length = 100)
     private String apellidos;
     @Column(nullable = false, unique = true)
-    private Integer dni;
-    @Column(nullable = false, unique = true)
-    private Integer telefono;
+    private String dni;
+    @Column(nullable = false)
+    private String telefono;
 
     @Column(nullable = false,  length = 80)
     private String cargo;

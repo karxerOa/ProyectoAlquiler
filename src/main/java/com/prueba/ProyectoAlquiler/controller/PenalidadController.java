@@ -42,12 +42,14 @@ public class PenalidadController {
 
     @PostMapping
     public ResponseEntity<PenalidadDto> save(@RequestBody PenalidadDto penalidad) throws Exception {
+        penalidad.setIdPenalidad(null);
         Penalidad entity = modelMapper.map(penalidad, Penalidad.class);
         return new ResponseEntity<>(modelMapper.map(service.save(entity), PenalidadDto.class), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PenalidadDto> update(@PathVariable Integer id, @RequestBody PenalidadDto penalidad) throws Exception {
+        penalidad.setIdPenalidad(id);
         Penalidad entity = modelMapper.map(penalidad, Penalidad.class);
         return ResponseEntity.ok(modelMapper.map(service.update(id, entity), PenalidadDto.class));
     }

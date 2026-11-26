@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -12,7 +12,7 @@ import java.util.Date;
 public class DevolucionDto {
 
     private Integer idDevolucion;
-    private Date fechaDevolucion;
+    private LocalDateTime fechaDevolucion;
     private String estadoPrenda;
     private String observacion;
 

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -13,8 +13,8 @@ public class PenalidadDto {
     private Integer idPenalidad;
     private String tipo_penalidad;
     private String descripcion;
-    private Integer monto;
-    private Date fecha_penalidad;
+    private java.math.BigDecimal monto;
+    private LocalDateTime fecha_penalidad;
     private Boolean estado;
 
     private Integer devolucionId;

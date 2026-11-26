@@ -42,6 +42,7 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioDto> save(@RequestBody UsuarioDto usuario) throws Exception {
+        usuario.setIdUser(null);
         Usuario entity = modelMapper.map(usuario, Usuario.class);
         return new ResponseEntity<>(modelMapper.map(service.save(entity), UsuarioDto.class), HttpStatus.CREATED);
     }

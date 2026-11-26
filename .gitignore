@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Local credentials (never commit)
+/config/local-secrets.properties
+
+# Base de datos local H2 de desarrollo
+/.localdb/

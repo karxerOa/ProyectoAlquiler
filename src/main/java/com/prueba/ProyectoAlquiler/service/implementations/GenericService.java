@@ -4,6 +4,7 @@ import com.prueba.ProyectoAlquiler.repository.IGenericRepository;
 import com.prueba.ProyectoAlquiler.service.interfaz.IGenericService;
 
 import java.util.List;
+import com.prueba.ProyectoAlquiler.exception.ModelNotFoundException;
 
 public abstract class GenericService <T, ID> implements IGenericService<T, ID> {
 
@@ -15,6 +16,7 @@ public abstract class GenericService <T, ID> implements IGenericService<T, ID> {
 
     @Override
     public T update(ID id, T t) throws Exception {
+        findById(id);
         return getRepo().save(t);
     }
 
@@ -25,11 +27,12 @@ public abstract class GenericService <T, ID> implements IGenericService<T, ID> {
 
     @Override
     public T findById(ID id) throws Exception {
-        return getRepo().findById(id).orElse(null);
+        return getRepo().findById(id).orElseThrow(() -> new ModelNotFoundException("Registro no encontrado: " + id));
     }
 
     @Override
     public void delete(ID id) throws Exception {
+        findById(id);
         getRepo().deleteById(id);
     }
 }

@@ -23,6 +23,8 @@ public class Usuario {
     private String username;
 
     @Column(nullable = false, length = 100)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    @lombok.ToString.Exclude
     private String password; // bcrypt
 
     @Column(nullable = false)

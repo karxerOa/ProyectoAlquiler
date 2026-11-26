@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/v1/empleados")
 public class EmpleadoController {
@@ -36,6 +37,7 @@ public class EmpleadoController {
 
     @PostMapping // 201 --> Created
     public ResponseEntity<EmpleadoDto> save(@RequestBody EmpleadoDto empleado) throws Exception{
+        empleado.setIdEmpleado(null);
         Empleado obj = service.save(modelMapper.map(empleado, Empleado.class));
         return new ResponseEntity<>(modelMapper.map(obj, EmpleadoDto.class), HttpStatus.CREATED);
     }
