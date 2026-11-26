@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PrendaService extends GenericService<Prenda, Integer> implements IPrendaService {
     private final IPrendaRepository repo;
-
     @Override
     protected IGenericRepository<Prenda, Integer> getRepo() {
         return repo;

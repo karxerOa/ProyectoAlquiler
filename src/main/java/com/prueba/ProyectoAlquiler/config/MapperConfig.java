@@ -385,6 +385,7 @@ public class MapperConfig {
             .addMapping(Prenda::getColor, PrendaDto::setColor)
             .addMapping(Prenda::getPrecioAlquiler, PrendaDto::setPrecioAlquiler)
             .addMapping(Prenda::getEstado, PrendaDto::setEstado)
+            .addMapping(Prenda::getImagen, PrendaDto::setImagen)
             .setPostConverter(context -> {
                 Prenda source = context.getSource();
                 PrendaDto destination = context.getDestination();
@@ -410,6 +411,7 @@ public class MapperConfig {
             .addMapping(PrendaDto::getColor, Prenda::setColor)
             .addMapping(PrendaDto::getPrecioAlquiler, Prenda::setPrecioAlquiler)
             .addMapping(PrendaDto::getEstado, Prenda::setEstado)
+            .addMapping(PrendaDto::getImagen, Prenda::setImagen)
             .addMappings(mapping -> {
                 mapping.using(
                     reference(Categoria::new, Categoria::setIdCategoria)

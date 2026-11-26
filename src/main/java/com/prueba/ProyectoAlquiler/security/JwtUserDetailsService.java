@@ -9,8 +9,8 @@ public class JwtUserDetailsService implements UserDetailsService {
  public UserDetails loadUserByUsername(String username) {
   var u=repo.findOneByUsername(username);
   if(u==null || u.getRol()==null) throw new UsernameNotFoundException("Credenciales invalidas");
-  String role=u.getRol().getName().toUpperCase(java.util.Locale.ROOT);
-  if(!role.startsWith("ROLE_")) role="ROLE_"+role;
+  String role = StaffRole.authority(u.getRol().getName())
+          .orElseThrow(() -> new UsernameNotFoundException("Credenciales invalidas"));
   return User.withUsername(u.getUsername()).password(u.getPassword()).disabled(!u.isEnabled()).authorities(role).build();
  }
 }

@@ -13,7 +13,7 @@ public class BootstrapConfig {
   @Value("${app.bootstrap.admin-username:admin}") String username){
   return args->{
    if(password.isBlank()) return;
-   for(String name:java.util.List.of("ADMIN","EMPLEADO","USER")) {
+   for(String name:java.util.List.of("ADMIN","EMPLEADO")) {
     if(roles.findAll().stream().noneMatch(r->name.equals(r.getName()))) {
      Rol role=new Rol();role.setName(name);role.setDescription(name);roles.save(role);
     }

@@ -27,9 +27,9 @@ Tras el primer arranque, quitar BOOTSTRAP_ADMIN_PASSWORD. El inicializador no ca
 ## Contrato y permisos
 
 - Login: POST `/login`, JSON `{"username":"admin","password":"tu clave"}`. Respuesta: `{"access_token":"..."}`.
-- Registro: POST `/registro`, JSON `{"username":"lector","password":"ClaveNueva123!"}`. Siempre asigna USER y enabled=true, ignora IDs/roles suministrados.
+- El administrador crea cuentas de personal mediante POST `/v1/usuarios`. Las fichas de clientes se gestionan en `/v1/clientes`.
 - Cabecera protegida: `Authorization: Bearer <access_token>`.
-- ADMIN: todos los CRUD. EMPLEADO: CRUD de negocio, sin usuarios/roles. USER: solo lectura de negocio. Otros nombres de rol no obtienen permisos de negocio. Se admite prefijo ROLE_.
+- ADMIN gestiona todos los módulos e imágenes. EMPLEADO gestiona los módulos de negocio. Solo estos dos roles pueden iniciar sesión, con o sin el prefijo ROLE_.
 - Swagger: `/swagger-ui/index.html`; especificación `/v3/api-docs`.
 - GET 200; POST 201 con DTO; PUT 200 con DTO; DELETE 204 sin cuerpo. Recurso inexistente 404, credenciales/token 401, permisos 403, JSON incorrecto 400, restricciones de datos 409.
 - PUT reemplaza los campos del DTO; enviar el cuerpo completo. En Usuario, password ausente/vacío conserva la clave. Ninguna respuesta incluye password/hash.
@@ -66,7 +66,7 @@ $env:DB_PASSWORD='<clave PostgreSQL>'
 ./mvnw.cmd clean compile test
 ```
 
-Comprueba BCrypt, login, registro sin escalada de privilegios, token malformado/expirado/firma incorrecta, usuario deshabilitado, 401/403/404/400, Swagger, preflight CORS y los 13 CRUD con IDs estables al actualizar y eliminación 204.
+Comprueba BCrypt, login, registro público cerrado y rechazo de cuentas con roles antiguos, token malformado/expirado/firma incorrecta, usuario deshabilitado, 401/403/404/400, Swagger, preflight CORS y los 13 CRUD con IDs estables al actualizar y eliminación 204.
 
 ## Archivos principales
 

@@ -17,6 +17,7 @@ public class PrendaDto {
     private String color;
     private BigDecimal precioAlquiler;
     private String estado;
+    private String imagen;
 
     private String categoriaNombre;
     private Integer categoriaId;

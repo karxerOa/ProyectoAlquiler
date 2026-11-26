@@ -70,29 +70,24 @@
       ]
     },
     {
-      "name": "Registro publico (USER)",
+      "name": "Obtener rol de empleado",
       "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "url": "{{baseUrl}}/registro",
-        "auth": {
-          "type": "noauth"
-        },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"username\": \"lector_demo\",\n  \"password\": \"CambiarClave123!\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
+        "method": "GET",
+        "url": "{{baseUrl}}/v1/roles"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const empleado = pm.response.json().find(r => ['EMPLEADO', 'ROLE_EMPLEADO'].includes(r.name.toUpperCase()));",
+              "pm.expect(empleado).to.exist;",
+              "pm.collectionVariables.set('empleadoRolId', empleado.idRol);"
+            ]
           }
         }
-      }
+      ]
     },
     {
       "name": "categorias",
@@ -458,7 +453,7 @@
             "url": "{{baseUrl}}/v1/usuarios",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"cruduser\",\n  \"password\": \"TestPassword123!\",\n  \"enabled\": true,\n  \"rolId\": \"{{rolesId}}\"\n}",
+              "raw": "{\n  \"username\": \"cruduser\",\n  \"password\": \"TestPassword123!\",\n  \"enabled\": true,\n  \"rolId\": \"{{empleadoRolId}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -518,7 +513,7 @@
             "url": "{{baseUrl}}/v1/usuarios/{{usuariosId}}",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"cruduser\",\n  \"password\": \"TestPassword123!\",\n  \"enabled\": true,\n  \"rolId\": \"{{rolesId}}\"\n}",
+              "raw": "{\n  \"username\": \"cruduser\",\n  \"password\": \"TestPassword123!\",\n  \"enabled\": true,\n  \"rolId\": \"{{empleadoRolId}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
