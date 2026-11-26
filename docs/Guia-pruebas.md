@@ -27,17 +27,21 @@ Tras el primer arranque, quitar BOOTSTRAP_ADMIN_PASSWORD. El inicializador no ca
 ## Contrato y permisos
 
 - Login: POST `/login`, JSON `{"username":"admin","password":"tu clave"}`. Respuesta: `{"access_token":"..."}`.
-- El administrador crea cuentas de personal mediante POST `/v1/usuarios`. Las fichas de clientes se gestionan en `/v1/clientes`.
+- El administrador crea cuentas ADMIN mediante POST `/v1/usuarios`. El alta de EMPLEADO se hace con POST `/v1/empleados`, que crea en una transacción la ficha y su cuenta vinculada. Las fichas de clientes se gestionan en `/v1/clientes`.
+- GET `/v1/empleados/me` devuelve la ficha vinculada al usuario autenticado; responde 404 para cuentas sin ficha. En POST `/v1/alquileres`, una cuenta EMPLEADO vinculada queda asignada automáticamente. ADMIN debe enviar `empleadoId` como responsable.
 - Cabecera protegida: `Authorization: Bearer <access_token>`.
 - ADMIN gestiona todos los módulos e imágenes. EMPLEADO gestiona los módulos de negocio. Solo estos dos roles pueden iniciar sesión, con o sin el prefijo ROLE_.
 - Swagger: `/swagger-ui/index.html`; especificación `/v3/api-docs`.
 - GET 200; POST 201 con DTO; PUT 200 con DTO; DELETE 204 sin cuerpo. Recurso inexistente 404, credenciales/token 401, permisos 403, JSON incorrecto 400, restricciones de datos 409.
 - PUT reemplaza los campos del DTO; enviar el cuerpo completo. En Usuario, password ausente/vacío conserva la clave. Ninguna respuesta incluye password/hash.
 - Los IDs de POST se descartan. PUT utiliza el ID de la URL, incluidos pagos y penalidades.
+- Para crear un empleado, enviar `username` y `password` junto con sus datos; en PUT se conserva la contraseña si se omite o se envía vacía. Las respuestas de empleado incluyen `idUser` y `username`, nunca `password`.
 - CORS centralizado en Spring Security, origen predeterminado http://localhost:4200; configurar CORS_ORIGINS para otros clientes. Postman no aplica CORS.
 - JWT es stateless: cerrar sesión en Postman consiste en borrar el token; no existe revocación inmediata de tokens individuales. Deshabilitar el usuario impide usar sus tokens.
 
 ## Modelo y compatibilidad de datos
+
+La relación opcional entre Empleado y Usuario vive en `empleado.id_user`; ejecuta `migracion-empleado-usuario.sql` una vez antes de desplegar esta versión. Los empleados preexistentes permanecen sin cuenta (`id_user IS NULL`). El índice único permite varias fichas sin cuenta y limita cada cuenta a una ficha.
 
 Devolucion.penalidades ahora usa mappedBy=devolucion. Se eliminaron las restricciones únicas de fechaDevolucion/estadoPrenda y tipo_penalidad/descripcion. Penalidad.monto es BigDecimal; fechas de devolución y penalidad son LocalDateTime (fecha y hora); DNI/teléfono son String para conservar ceros y prefijos. Los nombres JSON tipo_penalidad y fecha_penalidad se conservan.
 

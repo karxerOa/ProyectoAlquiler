@@ -1,12 +1,14 @@
 package com.prueba.ProyectoAlquiler.controller;
 import com.prueba.ProyectoAlquiler.dto.AlquilerDto;
 import com.prueba.ProyectoAlquiler.model.Alquiler;
+import com.prueba.ProyectoAlquiler.repository.IEmpleadoRepository;
 import com.prueba.ProyectoAlquiler.service.interfaz.IAlquilerService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,13 +17,15 @@ import java.util.List;
 @RequestMapping("/v1/alquileres")
 public class AlquilerController {
     private final IAlquilerService service;
-
     private final ModelMapper modelMapper;
+    private final IEmpleadoRepository empleadoRepository;
 
     public AlquilerController(IAlquilerService service,
-        @Qualifier("alquilerMapper") ModelMapper modelMapper) {
+        @Qualifier("alquilerMapper") ModelMapper modelMapper,
+        IEmpleadoRepository empleadoRepository) {
         this.service = service;
         this.modelMapper = modelMapper;
+        this.empleadoRepository = empleadoRepository;
     }
 
     @GetMapping
@@ -35,9 +39,19 @@ public class AlquilerController {
         return ResponseEntity.ok(modelMapper.map(service.findById(id), AlquilerDto.class));
     }
     @PostMapping
-    public ResponseEntity<AlquilerDto> save(@RequestBody AlquilerDto alquiler) throws Exception {
+    public ResponseEntity<AlquilerDto> save(@RequestBody AlquilerDto alquiler,
+                                            Authentication authentication) throws Exception {
         alquiler.setIdAlquiler(null);
         Alquiler entity = modelMapper.map(alquiler, Alquiler.class);
+        var empleado = empleadoRepository.findByUsuarioUsername(authentication.getName());
+        if (empleado.isPresent()) {
+            entity.setEmpleado(empleado.get());
+        } else if (authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_EMPLEADO"))) {
+            throw new IllegalArgumentException("Tu cuenta no está vinculada a un empleado");
+        } else if (alquiler.getEmpleadoId() == null) {
+            throw new IllegalArgumentException("Debe seleccionar un empleado responsable");
+        }
         Alquiler obj = service.save(entity);
         return new ResponseEntity<>(modelMapper.map(obj, AlquilerDto.class), HttpStatus.CREATED);
     }

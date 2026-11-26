@@ -11,6 +11,8 @@ public interface IUserRepository extends IGenericRepository<Usuario, Integer> {
     //@Query("FROM User u WHERE u.username = ?);
     //Queries derivados
     Usuario findOneByUsername(String username);
+    Usuario findByUsername(String username);
+    boolean existsByUsername(String username);
 
     @Transactional
     @Modifying

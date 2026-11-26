@@ -24,6 +24,7 @@ public class UsuarioService extends GenericService<Usuario, Integer> implements 
     }
     @Override public Usuario update(Integer id, Usuario u) throws Exception {
         Usuario old=findById(id);
+        rejectEmployeeAccount(old);
         requireStaffRole(u);
         u.setIdUser(id);
         if(u.getPassword()==null || u.getPassword().isBlank()) u.setPassword(old.getPassword());
@@ -31,13 +32,20 @@ public class UsuarioService extends GenericService<Usuario, Integer> implements 
         return super.update(id,u);
     }
     private void requireStaffRole(Usuario usuario) {
-        String message = "Seleccione el rol ADMIN o EMPLEADO";
+        String message = "El CRUD de usuarios solo permite el rol ADMIN; las cuentas EMPLEADO se crean desde empleados";
         if (usuario.getRol() == null || usuario.getRol().getIdRol() == null)
             throw new IllegalArgumentException(message);
         var rol = roles.findById(usuario.getRol().getIdRol())
-                .filter(r -> StaffRole.authority(r.getName()).isPresent())
+                .filter(r -> StaffRole.authority(r.getName()).filter("ROLE_ADMIN"::equals).isPresent())
                 .orElseThrow(() -> new IllegalArgumentException(message));
         usuario.setRol(rol);
+    }
+    private void rejectEmployeeAccount(Usuario usuario) {
+        if (usuario.getRol() != null
+                && StaffRole.authority(usuario.getRol().getName()).filter("ROLE_EMPLEADO"::equals).isPresent()) {
+            throw new IllegalArgumentException(
+                    "Las cuentas EMPLEADO solo se pueden editar desde la ficha de empleados");
+        }
     }
     private void validatePassword(String password){
         if(password==null || password.length()<8 || password.getBytes(java.nio.charset.StandardCharsets.UTF_8).length>72)

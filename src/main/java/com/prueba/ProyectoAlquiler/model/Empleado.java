@@ -31,6 +31,11 @@ public class Empleado {
     @Column(nullable = false,  length = 20)
     private String estado;
 
+    @ToString.Exclude
+    @OneToOne
+    @JoinColumn(name = "id_user", unique = true)
+    private Usuario usuario;
+
     @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "empleado")

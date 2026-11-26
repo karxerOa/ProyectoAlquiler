@@ -9,6 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EmpleadoDto {
     private Integer idEmpleado;
+    private Integer idUser;
+    private String username;
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
+    @lombok.ToString.Exclude
+    private String password;
     private String nombres;
     private String apellidos;
     private String dni;

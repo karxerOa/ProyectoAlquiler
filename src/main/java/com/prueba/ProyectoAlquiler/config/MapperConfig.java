@@ -214,6 +214,7 @@ public class MapperConfig {
     @Bean
     public ModelMapper empleadoMapper() {
         ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setImplicitMappingEnabled(false);
         mapper.createTypeMap(Empleado.class, EmpleadoDto.class)
                 .addMapping(Empleado::getIdEmpleado, EmpleadoDto::setIdEmpleado)
                 .addMapping(Empleado::getNombres, EmpleadoDto::setNombres)
@@ -221,7 +222,16 @@ public class MapperConfig {
                 .addMapping(Empleado::getDni, EmpleadoDto::setDni)
                 .addMapping(Empleado::getTelefono, EmpleadoDto::setTelefono)
                 .addMapping(Empleado::getCargo, EmpleadoDto::setCargo)
-                .addMapping(Empleado::getEstado, EmpleadoDto::setEstado);
+                .addMapping(Empleado::getEstado, EmpleadoDto::setEstado)
+                .setPostConverter(context -> {
+                    Empleado source = context.getSource();
+                    EmpleadoDto destination = context.getDestination();
+                    if (source.getUsuario() != null) {
+                        destination.setIdUser(source.getUsuario().getIdUser());
+                        destination.setUsername(source.getUsuario().getUsername());
+                    }
+                    return destination;
+                });
         mapper.createTypeMap(EmpleadoDto.class, Empleado.class)
                 .addMapping(EmpleadoDto::getIdEmpleado, Empleado::setIdEmpleado)
                 .addMapping(EmpleadoDto::getNombres, Empleado::setNombres)
